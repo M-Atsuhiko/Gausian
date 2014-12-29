@@ -8,6 +8,8 @@ then
     IS_TEST="TRUE"
 fi
 
+#test
+
 # 実行したseed
 #---------------------------------------
 # passive |F:75  || ()
