@@ -35,10 +35,10 @@ fi
 # 実行中
 # excuse time     | server| type    | seed      | dt     | suffix           |
 # ------------------------------------------------------------------------------
-# (12/28 20:15~)  | hal1  | passive | (1:10) | (5:30) | Rerative_75_0       | F:75 C:0 相対的な評価手法をpassiveに試す。理論的な形態の解が本当なら、この方法でも同一の傾向を持つ形になるはず
-# (12/28 20:25~)  | hal2  | ca      | (1:10) | (30)   | Tsuishi_75_0        | F:75 C:0 hal2-hal3-hal4の結果を比較する
-# (12/28 21:00~)  | hal3  | ca      | (1:10) | (30)   | Rerative_liner_75_0 | F:75 C:0
-# (12/28 20:30~)  | hal4  | ca      | (1:10) | (30)   | Rerative_Gaus_75_0  | F:75 C:0
+# (12/29 17:30~)  | hal1  | passive | (1:10) | (5:30) | Rerative_75_0       | F:75 C:0 相対的な評価手法をpassiveに試す。理論的な形態の解が本当なら、この方法でも同一の傾向を持つ形になるはず
+# (12/29 17:30~)  | hal2  | ca      | (1:10) | (30)   | Tsuishi_75_0        | F:75 C:0 hal2-hal3-hal4の結果を比較する
+# (12/29 17:35~)  | hal3  | ca      | (1:10) | (30)   | Rerative_liner_75_0 | F:75 C:0
+# (12/29 17:35~)  | hal4  | ca      | (1:10) | (30)   | Rerative_Gaus_75_0  | F:75 C:0
 
 
 # (12/17)  | iMac  | passive | ()           | F:75
@@ -48,7 +48,7 @@ DELTA_T=(30)
 CONTAIN_CONDUCTANCES="ca"
 Function_Ratio="75"                   #ここでFunction_Ratioを変更できる
 Conductance_Ratio="0"
-Spesific="Rerative_liner_"${Function_Ratio}"_"${Conductance_Ratio}     #その他のprefix
+Spesific="Rerative_Gaus_"${Function_Ratio}"_"${Conductance_Ratio}     #その他のprefix
 
 for se in ${SEED[@]}
 do

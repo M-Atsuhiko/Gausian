@@ -333,7 +333,7 @@ SIMUL_PARAMETER_FILE           <- "./sim_parameter.hoc" # シミュレーショ�
 
 ### 評価関数に関わる部分 ###
 Function_ratio                 <- 50#デフォルト値
-Conductance_ratio              <- 25
+Conductance_ratio              <- 0
 if(!(is.na(args_Function_ratio)) && !(is.na(args_Conductance_ratio))){
   Function_ratio                 <- args_Function_ratio
   Conductance_ratio                 <- args_Conductance_ratio
