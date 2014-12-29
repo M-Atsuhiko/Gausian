@@ -1,0 +1,40 @@
+strdef output_file_u,output_file_l,output_file_ul,output_file_lu,Vector_init_file
+
+objref dend0_x,dend0_y,dend0_z,dend0_diam,dend1_x,dend1_y,dend1_z,dend1_diam
+objref dend_nseg,dend_CaT_conductance,dend_Ka_conductance
+
+dend0_x = new Vector()
+dend0_y = new Vector()
+dend0_z = new Vector()
+dend0_diam = new Vector()
+
+dend1_x = new Vector()
+dend1_y = new Vector()
+dend1_z = new Vector()
+dend1_diam = new Vector()
+
+dend_nseg = new Vector()
+dend_CaT_conductance = new Vector()
+dend_Ka_conductance = new Vector()
+
+objref soma_connect
+soma_connect = new Vector()
+
+objref connect0,connect1
+connect0 = new Vector()
+connect1 = new Vector()
+
+objref Upper_syn_dend,Lower_syn_dend
+Upper_syn_dend = new Vector()
+Lower_syn_dend = new Vector()
+
+objref Upper_syn_rate,Lower_syn_rate
+Upper_syn_rate = new Vector()
+Lower_syn_rate = new Vector()
+
+objref UPPER_SYN_ACTIVATE_TIME,LOWER_SYN_ACTIVATE_TIME
+UPPER_SYN_ACTIVATE_TIME = new Vector()
+LOWER_SYN_ACTIVATE_TIME = new Vector()
+
+objref fp_soma
+fp_soma = new File()
