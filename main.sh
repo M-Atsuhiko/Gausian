@@ -1,6 +1,8 @@
 #! /bin/bash
 #author: Atsuhiko Murakami
 
+#git test
+
 IS_TEST="FALSE"
 
 if [ -n "$1" ]
