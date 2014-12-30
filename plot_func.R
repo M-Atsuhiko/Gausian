@@ -13,19 +13,10 @@ plot_func <- function(Datas,Colors,row,filename,xlab,ylab,legend){
        ylab=colname)
 
   for(Data in Datas){
-    
     means <- apply(Data,2,mean)
     sds <- apply(Data,2,sd)
     maxs <- apply(Data,2,max)
-
-    lines(cbind(row,means)
-          ,col=Colors[color_i])
-
-    lines(cbind(row,maxs),
-          col=Colors[color_i],
-          lty="dashed")
     
-
     arrows(row,means,
            row,means - sds,
            angle=90,length=0.1,lwd=2)
@@ -33,10 +24,24 @@ plot_func <- function(Datas,Colors,row,filename,xlab,ylab,legend){
     arrows(row,means,
            row,means + sds,
            angle=90,length=0.1,lwd=2)
+
+    if(ncol(Data) == 1){
+      points(row,means,
+             col=Colors[color_i],
+             cex=2)
+    }else{
+      lines(cbind(row,means),
+            col=Colors[color_i])
+
+      lines(cbind(row,maxs),
+            col=Colors[color_i],
+            lty="dashed")
+    }
     
     color_i <- color_i + 1
   }
 
+  
   if(length(legend) > 0){
     legend("topright",
            legend=legend[,1],
