@@ -1,214 +1,217 @@
-make_graphs <- function(All_Lower_data,All_Upper_data,output_file,ylabel){
-  mean_Lower_data <- apply(All_Lower_data,1,mean)
-  sd_Lower_data <- apply(All_Lower_data,1,sd)
-  mean_Upper_data <- apply(All_Upper_data,1,mean)
-  sd_Upper_data <- apply(All_Upper_data,1,sd)
-  plot(rbind(c(min(Delta_T),min(mean_Lower_data - sd_Lower_data,mean_Upper_data - sd_Upper_data)),
-             c(max(Delta_T),max(mean_Lower_data + sd_Lower_data,mean_Upper_data + sd_Upper_data))),
-       type="n",
-       xlab=expression(paste("Optimized ",Delta,"t [ms]")),
-       ylab=ylabel,
-       ps=17)
+Type <- "Gausian"
 
-  par(pch=5,cex=1.5)
-  
-  par(lty="solid",lwd=4)
-  lines(cbind(Delta_T,mean_Lower_data),col="blue")
+source(paste(Type,"_Dendritic_function_parameter.R",sep=""))
+source("plot_func.R")
 
-  par(lwd=1)
-  arrows(Delta_T,mean_Lower_data,
-         Delta_T,mean_Lower_data + sd_Lower_data,
-         angle=90,length=0.1,col="blue")
-  arrows(Delta_T,mean_Lower_data,
-         Delta_T,mean_Lower_data - sd_Lower_data,
-         angle=90,length=0.1,col="blue")
-  par(lwd=4)
-  lines(cbind(Delta_T,mean_Upper_data),col="red")
-  par(lwd=1)
-  arrows(Delta_T,mean_Upper_data,
-         Delta_T,mean_Upper_data + sd_Upper_data,
-         angle=90,length=0.1,col="red")
-  arrows(Delta_T,mean_Upper_data,
-         Delta_T,mean_Upper_data - sd_Upper_data,
-         angle=90,length=0.1,col="red")
-  legend("topright",legend=c("left","right"),col=c("blue","red"),lty=c("solid","solid"),lwt=c(4,4))
-  cat("output:",output_file,"\n")
-  dev.copy2eps(file=output_file)
-}
+par(lwd=3,
+    cex=1.4,
+    mex=1.2)
 
-Dir <- "./Result_investigation/"
-
-source(paste(Dir,"calc_syn_length_diameter.R",sep=""))
-source(paste(Dir,"calc_number_synapse.R",sep=""))
-source(paste(Dir,"calc_contraction.R",sep=""))
-source(paste(Dir,"Stem_diam.R",sep=""))
-
-source("./Dendritic_function_parameter.R")
-source("./TREE_simulation_function.R")
+output_dir <- paste("./",Type,"_Result/",sep="")
 
 WITH_K <- FALSE
 WITH_Ca <- TRUE
-SEED <- 1:4
-Function_ratio <- 65
-Conductance_ratio <- 10
+
+RAND_SEED <- 1:10
+DELTA_T <- 30#seq(5,30,by=5)
+Function_ratio <- 75
+Conductance_ratio <- 0
 Morphology_ratio <- 100 - (Function_ratio + Conductance_ratio)
-extra_prefix <- paste("volume_",Function_ratio,"_",Conductance_ratio,sep="")
+extra_prefix <- paste("Rerative_Gaus_",Function_ratio,"_",Conductance_ratio,sep="")
 
-#Delta_T<- seq(5,30,by=5)
-Delta_T <- 30
-Morphology_ratio <- 100 - Function_ratio
-
-if(WITH_K && !(WITH_Ca)){
-  contain_conductance <- "k"
-}else if(WITH_K && WITH_Ca){
-  contain_conductance <- "k_ca"
+if(WITH_K*WITH_Ca){
+  name <- "k_ca"
+}else if(WITH_K){
+  name <- "k"
 }else if(WITH_Ca){
-  contain_conductance <- "ca"
-}else{
-  contain_conductance <- "passive"
-}
+  name <- "ca"
+}else name <- "passive"
 
+cat("inciude conductance:",name,"\n")
 
-if(WITH_Ca && !(WITH_K)){
-  SIM_TIME                     <- 100 #シミュレーションの長さ
-}else{
-  SIM_TIME                     <- 50 #シミュレーションの長さ
-}
+Data_Dir <- paste("./",name,"_Result/",sep="")
 
+Datas <- as.list(NULL)
 
-Data_Directory <- paste("./",contain_conductance,"_Result/",sep="")
-output_Directory <- "./Result/"
-file_prefix <- paste(output_Directory,contain_conductance,"_FR",Function_ratio,"_result_",extra_prefix,"_",sep="")
+Fs <- c()
+TREE_lengths <- c()
+TREE_volumes <- c()
+N_Upper_Syns <- c()
+N_Lower_Syns <- c()
+Upper_Diams <- c()
+Lower_Diams <- c()
+Ca_ratios <- c()
+K_ratios <- c()
 
-Ratios <- c()
-All_Ratios <- c()
-                                        # synapse_length_diam
-Lower_length_diams <- c()
-Upper_length_diams <- c()
-All_Lower_length_diams <- c()
-All_Upper_length_diams <- c()
-
-# synapse nums
-Lower_syn_nums <- c()
-Upper_syn_nums <- c()
-All_Lower_syn_nums <- c()
-All_Upper_syn_nums <- c()
-
-# contruction
-contructions <- c()
-All_contructions <- c()
-
-# Stem diam
-Lower_Stem_diams <- c()
-All_Lower_Stem_diams <- c()
-Upper_Stem_diams <- c()
-All_Upper_Stem_diams <- c()
-
-TREE_sizes <- c()
-All_TREE_sizes <- c()
-
-
-for(dt in Delta_T){
-  for(seed in SEED){
-    cat("SEED: ",seed," dt: ",dt,"\n")
-    load(paste(Data_Directory,"SEED",seed,"_dt",dt,"_",contain_conductance,"_FR",Function_ratio,"_",extra_prefix,"_Best_Datas.xdr",sep=""))
-    TREE <- Best_Datas[[length(Best_Datas)]][["TREE"]]
-    rm("Best_Datas")
-    named_TREE <- set_Upper_or_Lower_or_Other(TREE)
-
-    Estimate_ratio_length <- TREE_simulation_function(TREE,dt,"Not_display",WITH_K,WITH_Ca)
-    if(is.na(Estimate_ratio_length[1])) cat("Data is not optimized!\n")
-    Ratios <- c(Ratios,Estimate_ratio_length[2])
-    TREE_sizes <- c(TREE_sizes,Estimate_ratio_length[3])
-    lower_upper_syn_length_diam <- calc_syn_length_diameter(TREE)
-    lower_upper_syn_num <- calc_number_synapse(TREE)
-    Lower_length_diams <- c(Lower_length_diams,lower_upper_syn_length_diam[1])
-    Upper_length_diams <- c(Upper_length_diams,lower_upper_syn_length_diam[2])
-    Lower_syn_nums <- c(Lower_syn_nums,lower_upper_syn_num[1])
-    Upper_syn_nums <- c(Upper_syn_nums,lower_upper_syn_num[2])
-    Lower_Stem_diams <- c(Lower_Stem_diams,Stem_Diam(TREE[["Lower_Dend"]]))
-    Upper_Stem_diams <- c(Upper_Stem_diams,Stem_Diam(TREE[["Upper_Dend"]]))
+for(dt in DELTA_T){
+  cat("Delta_T:",dt,"\n")
+  Data_i <- 1
+  for(sd in RAND_SEED){
+    cat("SEED:",sd,"\n")
+    input_filename <- paste(Data_Dir,"SEED",sd,"_","dt",dt,"_",paste(name,collapse="_"),"_",paste("FR",Function_ratio,sep=""),"_",extra_prefix,"_Best_Datas.xdr",sep="")
+    cat("input file:",input_filename,"\n")
+    load(input_filename)
+    Datas[[Data_i]] <- Best_Datas[[length(Best_Datas)]]
+    Data_i <- Data_i + 1
   }
   
-  All_Ratios <- rbind(All_Ratios,Ratios)
-  All_TREE_sizes <- rbind(All_TREE_sizes,TREE_sizes)
+  Fs <- cbind(Fs,
+              sapply(Datas,"[[","Ratio"))
   
-  All_Lower_length_diams <- rbind(All_Lower_length_diams,Lower_length_diams)
-  All_Upper_length_diams <- rbind(All_Upper_length_diams,Upper_length_diams)
+  TREE_lengths <- cbind(TREE_lengths,
+                       sapply(lapply(Datas,"[[","TREE"),sum_length))
 
-  All_Lower_syn_nums <- rbind(All_Lower_syn_nums,Lower_syn_nums)
-  All_Upper_syn_nums <- rbind(All_Upper_syn_nums,Upper_syn_nums)
+  TREE_volumes <- cbind(TREE_volumes,
+                       sapply(lapply(Datas,"[[","TREE"),calc_volume))
 
-  All_Lower_Stem_diams <- rbind(All_Lower_Stem_diams,Lower_Stem_diams)
-  All_Upper_Stem_diams <- rbind(All_Upper_Stem_diams,Upper_Stem_diams)
+  named_TREEs <- lapply(lapply(Datas,"[[","TREE"),set_Upper_or_Lower_or_Other)
+
+  Upper_Diams <- cbind(Upper_Diams,
+                      sapply(lapply(named_TREEs,"[[","Upper_Dend"),function(Dends){
+                        return(mean(sapply(Dends,function(Dend){
+                          return(Dend[[1]][["diam"]])
+                        })))
+                      }))
+
+  Lower_Diams <- cbind(Lower_Diams,
+                      sapply(lapply(named_TREEs,"[[","Lower_Dend"),function(Dends){
+                        return(mean(sapply(Dends,function(Dend){
+                          return(Dend[[1]][["diam"]])
+                        })))
+                      }))
   
-  Ratios <- c()
-  Lower_length_diams <- c()
-  Upper_length_diams <- c()
-  Lower_syn_nums <- c()
-  Upper_syn_nums <- c()
-  Lower_Stem_diams <- c()
-  Upper_Stem_diams <- c()
-  TREE_sizes <- c()
+  N_Upper_Syns <- cbind(N_Upper_Syns,
+                       sapply(lapply(named_TREEs,"[[","Upper_Dend"),function(Dends){
+                         return(sum(sapply(Dends,function(Dend){
+                           return(sum(sapply(Dend,function(Branch){
+                             if(is.matrix(Branch[["synapse"]])) return(nrow(Branch[["synapse"]]))
+                             else return(0)
+                           })))
+                         })))
+                       }))
+
+  N_Lower_Syns <- cbind(N_Lower_Syns,
+                       sapply(lapply(named_TREEs,"[[","Lower_Dend"),function(Dends){
+                         return(sum(sapply(Dends,function(Dend){
+                           return(sum(sapply(Dend,function(Branch){
+                             if(is.matrix(Branch[["synapse"]])) return(nrow(Branch[["synapse"]]))
+                             else return(0)
+                           })))
+                         })))
+                       }))
+  
+  if(WITH_Ca || WITH_K){
+
+    divided_TREEs <- list()
+
+    for(Data_i in 1:length(Datas)){
+      divided_TREEs[[Data_i]] <- divid_and_set_conductance(Datas[[Data_i]][["TREE"]],Datas[[Data_i]][["Params"]])
+    }
+    
+    if(WITH_Ca)
+      Ca_ratios <- cbind(Ca_ratios,
+                          sapply(divided_TREEs,function(TREE){
+                            Conductance_amont <- calc_Conductance_amount(TREE)
+                            return(Conductance_amont[2]/Conductance_amont[4])
+                          }))
+    if(WITH_K)
+      K_ratios <- cbind(K_ratios,
+                         sapply(divided_TREEs,function(TREE){
+                           Conductance_amont <- calc_Conductance_amount(TREE)
+                           return(Conductance_amont[1]/Conductance_amont[3])
+                         }))
+  }
 }
 
 
-print(All_Ratios)
-print(All_TREE_sizes)
-print(All_Lower_length_diams)
-print(All_Upper_length_diams)
-print(All_Lower_syn_nums)
-print(All_Upper_syn_nums)
-print(All_Lower_Stem_diams)
-print(All_Upper_Stem_diams)
+prefix <- paste(output_dir,name,"_",extra_prefix,"_",sep="")
 
-#グラフの作成
-output_file <- paste(file_prefix,"Ratios.eps",sep="")
-mean_Ratios<- apply(All_Ratios,1,mean)
-sd_Ratios<- apply(All_Ratios,1,sd)
-plot(rbind(c(min(Delta_T),min(mean_Ratios - sd_Ratios)),
-           c(max(Delta_T),max(mean_Ratios + sd_Ratios))),
-     type="n",
-     xlab=expression(paste("Optimized ",Delta,"t [ms]")),
-     ylab="F",
-     ps=17)
-lines(cbind(Delta_T,mean_Ratios),col="red",
-      lwd=4)
-arrows(Delta_T,mean_Ratios,
-       Delta_T,mean_Ratios + sd_Ratios,
-       angle=90,length=0.1,lwd=2)
-arrows(Delta_T,mean_Ratios,
-       Delta_T,mean_Ratios - sd_Ratios,
-       angle=90,length=0.1,lwd=2)
-cat("output:",output_file,"\n")
-dev.copy2eps(file=output_file)
+rowname <- expression(paste("Optimized ",Delta,"t [ms]"))
 
+line_type <- "solid"
 
-output_file <- paste(file_prefix,"TREE_sizes.eps",sep="")
-mean_TREE_sizes<- apply(All_TREE_sizes,1,mean)
-sd_TREE_sizes<- apply(All_TREE_sizes,1,sd)
-plot(rbind(c(min(Delta_T),min(mean_TREE_sizes - sd_TREE_sizes)),
-           c(max(Delta_T),max(mean_TREE_sizes + sd_TREE_sizes))),
-     type="n",
-     xlab=expression(paste("Optimized ",Delta,"t [ms]")),
-     ylab="Size",
-     ps=17)
-lines(cbind(Delta_T,mean_TREE_sizes),col="red",
-      lwd=4)
-arrows(Delta_T,mean_TREE_sizes,
-       Delta_T,mean_TREE_sizes + sd_TREE_sizes,
-       angle=90,length=0.1,lwd=2)
-arrows(Delta_T,mean_TREE_sizes,
-       Delta_T,mean_TREE_sizes - sd_TREE_sizes,
-       angle=90,length=0.1,lwd=2)
-cat("output:",output_file,"\n")
-dev.copy2eps(file=output_file)
+colname <- "F"
+Filename <- paste(prefix,"Fs.eps",sep="")
+color <- c("red")
+legend <- c()
+plot_func(list(Fs),color,DELTA_T,Filename,
+          colname,
+          rowname,
+          legend)
+Filename <- paste(prefix,"Fs.xdr",sep="")
+save(Fs,file=Filename)
 
-make_graphs(All_Lower_length_diams,All_Upper_length_diams,paste(file_prefix,"syn_diam.eps",sep=""),"Length to synapse/diameter")
-make_graphs(All_Lower_syn_nums,All_Upper_syn_nums,paste(file_prefix,"num_syn.eps",sep=""),"number of synapse")
-make_graphs(All_Lower_Stem_diams,All_Upper_Stem_diams,paste(file_prefix,"stem_diam.eps",sep=""),"Stem diameter")
+colname <- expression(paste("TREE Length [",mu,"m]"))
+Filename <- paste(prefix,"TREE_lengths.eps",sep="")
+color <- c("red")
+legend <- c()
+plot_func(list(TREE_lengths),color,DELTA_T,Filename,
+          colname,
+          rowname,
+          legend)
+Filename <- paste(prefix,"TREE_lengths.xdr",sep="")
+save(TREE_lengths,file=Filename)
 
-save_Ratio <- cbind(Delta_T,All_Ratios)
-save(save_Ratio,file=paste(file_prefix,"save_Ratio.xdr",sep=""))
-#file_prefix <- paste(output_Directory,contain_conductance,"_result_",sep="")
+colname <- expression(paste("TREE Volume [",mu,m^3,"]"))
+Filename <- paste(prefix,"TREE_volume.eps",sep="")
+color <- c("red")
+legend <- c()
+plot_func(list(TREE_volumes),color,DELTA_T,Filename,
+          colname,
+          rowname,
+          legend)
+Filename <- paste(prefix,"TREE_volumes.xdr",sep="")
+save(TREE_volumes,file=Filename)
 
+colname <- expression(paste("Stem diam [",mu,"m]"))
+Filename <- paste(prefix,"Stem_diam.eps",sep="")
+color <- c("red","blue")
+legend <- cbind(c("Red Branch","Blue Branch"),
+                c("red","blue"),
+                c(line_type,line_type))
+Diams <- list(Upper_Diams,Lower_Diams)
+plot_func(Diams,color,DELTA_T,Filename,
+          colname,
+          rowname,
+          legend)
+Filename <- paste(prefix,"Stem_diams.xdr",sep="")
+save(Diams,file=Filename)
+
+colname <-paste("Number of Synapses")
+Filename <- paste(prefix,"Number_synapse.eps",sep="")
+color <- c("red","blue")
+legend <- cbind(c("Red Synapse","Blue Synapse"),
+                c("red","blue"),
+                c(line_type,line_type))
+Synapses <- list(N_Upper_Syns,N_Lower_Syns)
+plot_func(Synapses,color,DELTA_T,Filename,
+          colname,
+          rowname,
+          legend)
+Filename <- paste(prefix,"Synapses.xdr",sep="")
+save(Synapses,file=Filename)
+
+if(WITH_Ca){
+  colname <-paste("Ca Conductance ratio")
+  Filename <- paste(prefix,"Ca_conductance_ratio.eps",sep="")
+  color <- "red"
+  legend <- c()
+  plot_func(list(Ca_ratios),color,DELTA_T,Filename,
+            colname,
+            rowname,
+            legend)
+  Filename <- paste(prefix,"Ca_tatio.xdr",sep="")
+  save(Ca_ratios,file=Filename)
+}
+if(WITH_K){
+    colname <-paste("K Conductance ratio")
+    Filename <- paste(prefix,"K_conductance_ratio.eps",sep="")
+    color <- "red"
+    legend <- c()
+    plot_func(list(K_ratios),color,DELTA_T,Filename,
+              colname,
+              rowname,
+              legend)
+    Filename <- paste(prefix,"K_tatio.xdr",sep="")
+    save(K_ratios,file=Filename)
+}

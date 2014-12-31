@@ -3,7 +3,7 @@
 ### 最も外側で回るmainプログラム
 
 #parameter設定、他のプログラムインクルード
-source("Dendritic_function_parameter.R")
+source("Gausian_Dendritic_function_parameter.R")
 
 #シミュレーションで使用するパラメータをまとめたhocファイルを生成する
 make_simul_parameter(SIMUL_PARAMETER_FILE,celsius,cai,cao,ek)
