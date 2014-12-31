@@ -1,4 +1,4 @@
-plot_func <- function(Datas,Colors,row,filename,xlab,ylab,legend){
+plot_func <- function(Datas,Colors,row,filename,colname,rowname,legend){
   plot.new()
 
   mean_sd_max_Datas <- lapply(Datas,function(Data){

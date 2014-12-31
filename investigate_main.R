@@ -130,6 +130,7 @@ rowname <- expression(paste("Optimized ",Delta,"t [ms]"))
 
 line_type <- "solid"
 
+##########################
 colname <- "F"
 Filename <- paste(prefix,"Fs.eps",sep="")
 color <- c("red")
@@ -140,6 +141,8 @@ plot_func(list(Fs),color,DELTA_T,Filename,
           legend)
 Filename <- paste(prefix,"Fs.xdr",sep="")
 save(Fs,file=Filename)
+
+##########################
 
 colname <- expression(paste("TREE Length [",mu,"m]"))
 Filename <- paste(prefix,"TREE_lengths.eps",sep="")
@@ -152,6 +155,8 @@ plot_func(list(TREE_lengths),color,DELTA_T,Filename,
 Filename <- paste(prefix,"TREE_lengths.xdr",sep="")
 save(TREE_lengths,file=Filename)
 
+##########################
+
 colname <- expression(paste("TREE Volume [",mu,m^3,"]"))
 Filename <- paste(prefix,"TREE_volume.eps",sep="")
 color <- c("red")
@@ -162,6 +167,8 @@ plot_func(list(TREE_volumes),color,DELTA_T,Filename,
           legend)
 Filename <- paste(prefix,"TREE_volumes.xdr",sep="")
 save(TREE_volumes,file=Filename)
+
+##########################
 
 colname <- expression(paste("Stem diam [",mu,"m]"))
 Filename <- paste(prefix,"Stem_diam.eps",sep="")
@@ -177,6 +184,8 @@ plot_func(Diams,color,DELTA_T,Filename,
 Filename <- paste(prefix,"Stem_diams.xdr",sep="")
 save(Diams,file=Filename)
 
+##########################
+
 colname <-paste("Number of Synapses")
 Filename <- paste(prefix,"Number_synapse.eps",sep="")
 color <- c("red","blue")
@@ -191,6 +200,8 @@ plot_func(Synapses,color,DELTA_T,Filename,
 Filename <- paste(prefix,"Synapses.xdr",sep="")
 save(Synapses,file=Filename)
 
+##########################
+
 if(WITH_Ca){
   colname <-paste("Ca Conductance ratio")
   Filename <- paste(prefix,"Ca_conductance_ratio.eps",sep="")
@@ -203,6 +214,9 @@ if(WITH_Ca){
   Filename <- paste(prefix,"Ca_tatio.xdr",sep="")
   save(Ca_ratios,file=Filename)
 }
+
+##########################
+
 if(WITH_K){
     colname <-paste("K Conductance ratio")
     Filename <- paste(prefix,"K_conductance_ratio.eps",sep="")
