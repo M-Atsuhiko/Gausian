@@ -40,7 +40,8 @@ plot_func <- function(Datas,Colors,row,filename,colname,rowname,legend){
              pch=16)
     }else{
       lines(cbind(row,means),
-            col=color)
+            col=color,
+            lty=line_type)
 
       lines(cbind(row,maxs),
             col=color,
