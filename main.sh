@@ -35,19 +35,19 @@ fi
 #SEED = 2では回らない
 
 # 実行中
-# excuse time     | server| type    | seed      | dt     | suffix           |
+# excuse time     | server| type    | seed   | dt     | suffix         |
 # ------------------------------------------------------------------------------
-# ()  | hal1  | passive | () | () |  | F:75 C:0 
-# (12/30 17:30~)  | hal2  | passive | (1:10) | (30)   | Tsuishi_75_0        | F:75 C:0 
-# ()  | hal3  | ca      | () | ()   | | F:0 C:0
-# (12/30 17:30~)  | hal4  | ca      | (1:10) | (30)   | Rerative_Gaus_75_10 | F:75 C:10
+# (12/31 17:00~)  | hal1  | k ca    | (1:10) | (5:30) | Rerative_liner_75_0  | F:75 C:0 #どうなるか試し
+# (12/30 17:30~)  | hal2  | passive | (1:10) | (30)   | Tsuishi_75_0   | F:75 C:0 
+# (12/31 17:00~)  | hal3  | k ca    | (1:10) | (5:30) | Tsuishi_75_0   | F:75 C:0
+# (12/31 17:00~)  | hal4  | ca      | (1:10) | (5:25) | Rerative_Gaus_75_0 | F:75 C:0
 
 
 # (12/17)  | iMac  | passive | ()           | F:75
 
 SEED=(1 2 3 4 5 6 7 8 9 10)
 DELTA_T=(5 10 15 20 25 30)
-CONTAIN_CONDUCTANCES=""
+CONTAIN_CONDUCTANCES="k ca"
 Function_Ratio="75"                   #ここでFunction_Ratioを変更できる
 Conductance_Ratio="0"
 Spesific="Tsuishi_"${Function_Ratio}"_"${Conductance_Ratio}     #その他のprefix
