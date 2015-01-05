@@ -139,7 +139,7 @@ if(WITH_K) include_conductances <- c(include_conductances,"k")
 if(WITH_Ca) include_conductances <- c(include_conductances,"ca")
 if(WITH_K + WITH_Ca == 0) include_conductances <- "passive"
 
-#ALPHA                          <- 15                    # 評価値に対する形態の影響度。ここ結構結果に影響しそう(notice!)
+ALPHA                          <- 1                    # 評価値に対する形態の影響度。ここ結構結果に影響しそう(notice!)
 #ALPHAを大きく(最大3くらい)すると、パフォーマンスよりも形態重視の結果になりそう
 
 ### マルチコアで走らせる
@@ -172,7 +172,7 @@ MUTATION_Ca_peak                <- 5*10^(-5)
 MUTATION_conductance_Gaus_mean  <- 0.05
 MUTATION_conductance_Gaus_sd    <- 0.05
 
-MUTATION_taper_rate             <- 0.05
+MUTATION_taper_rate             <- 0.005
 
 MUTATION_CONDUCTANCE_SIGMA     <- 0.05*10^(-3)            # 標準偏差0.05では大きすぎるため
 GA_DELETE                      <- 0.15                   # 樹状突起を減らす確率
@@ -403,6 +403,8 @@ Segment_Labels <- c(
 Simple_Param_Labels <- c(
 #[[1]]
   "Stem_diameter",#非負
+#[[2]]
+  "Taper",#非負
 #[[2]]
   "K_Conductances",#非負
 #[[3]]

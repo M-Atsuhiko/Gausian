@@ -5,7 +5,7 @@ Morpho_penalty <- function(TREE){
   upper_y <- max(sapply(Upper_Dend,function(Branch){
     return(Branch[["coordi"]][,2])
   }))
-  lower_y <- min(sapply(Upper_Dend,function(Branch){
+  lower_y <- min(sapply(Lower_Dend,function(Branch){
     return(Branch[["coordi"]][,2])
   }))
 
