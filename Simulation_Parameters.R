@@ -139,7 +139,7 @@ if(WITH_K) include_conductances <- c(include_conductances,"k")
 if(WITH_Ca) include_conductances <- c(include_conductances,"ca")
 if(WITH_K + WITH_Ca == 0) include_conductances <- "passive"
 
-ALPHA                          <- 1                    # 評価値に対する形態の影響度。ここ結構結果に影響しそう(notice!)
+ALPHA                          <- 0.5                    # 評価値に対する形態の影響度。ここ結構結果に影響しそう(notice!)
 #ALPHAを大きく(最大3くらい)すると、パフォーマンスよりも形態重視の結果になりそう
 
 ### マルチコアで走らせる

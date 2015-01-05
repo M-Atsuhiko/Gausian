@@ -38,9 +38,9 @@ fi
 # excuse time   | server| type    | seed   | dt     | suffix               |
 # ------------------------------------------------------------------------------
 # (1/5 15:20~)  | hal1  | ca      | (1:10) | (5:30) | Determine_75_0       | F:75 C:0
-# (1/5 13:50~)  | hal2  | ca      | (1:3)  | (5:30) | Tsuishi_alfa_1       | alfa:1
+# (1/5 13:50~)  | hal2  | ca      | (1:3)  | (5:30) | Tsuishi_alfa_05       | alfa:0.5
 # (1/5 14:00~)  | hal3  | ca      | (1:10) | (5:25) | Rerative_liner_75_0  | F:75 C:0
-# (1/5 13:30~)  | hal4  | ca      | (1:10) | (5:30) | Rerative_Gaus_75_5   | F:75 C:5
+# (1/5 13:30~)  | hal4  | ca      | (1:10) | (5:30) | Rerative_Gaus_75_5   | F:75 C:5 #Bad Resultで結果を分けるのをやめてみる
 
 
 # (12/17)  | iMac  | passive | ()           | F:75
@@ -50,7 +50,7 @@ DELTA_T=(5 10 15 20 25 30)
 CONTAIN_CONDUCTANCES="ca"
 Function_Ratio="75"                   #ここでFunction_Ratioを変更できる
 Conductance_Ratio="0"
-Spesific="Determine_"${Function_Ratio}"_"${Conductance_Ratio}     #その他のprefix
+Spesific="Tsuishi_"${Function_Ratio}"_"${Conductance_Ratio}     #その他のprefix
 
 for se in ${SEED[@]}
 do

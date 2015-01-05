@@ -14,9 +14,10 @@ Result_Estimate <- function(MULTI_GENERATION){
     else if(MULTI_GENERATION[[i]][["Result"]] == EPSP_E)
       MULTI_GENERATION[[i]][["Estimate"]] <- penalty(1,EPSP_PENALTY_MIEW,EPSP_PENALTY_SIGMA)
 
-    else if(MULTI_GENERATION[[i]][["Result"]] == Bad_Result)
-      MULTI_GENERATION[[i]][["Estimate"]] <- (MULTI_GENERATION[[i]][["Ratio"]]^(-1))*-1
-    else if(MULTI_GENERATION[[i]][["Result"]] == Good_Result){
+#    else if(MULTI_GENERATION[[i]][["Result"]] == Bad_Result)
+#      MULTI_GENERATION[[i]][["Estimate"]] <- (MULTI_GENERATION[[i]][["Ratio"]]^(-1))*-1
+    else if(MULTI_GENERATION[[i]][["Result"]] == Good_Result ||
+            MULTI_GENERATION[[i]][["Result"]] == Bad_Result){
       Good_i <- c(Good_i,i)
       Max_F <- max(Max_F,MULTI_GENERATION[[i]][["Ratio"]])
       Max_Mor <- max(Max_Mor,MULTI_GENERATION[[i]][["TREE_Volume"]])

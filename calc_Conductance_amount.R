@@ -1,4 +1,4 @@
-calc_Conductance_amount <- function(TREE,WITH_K,WITH_Ca){
+calc_Conductance_amount <- function(TREE){
   
   All_K_Conductance <- 0 #S
   All_Ca_Conductance <- 0 #S
