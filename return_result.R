@@ -1,4 +1,9 @@
-return_result <- function(result_file_ul,result_file_lu,result_file_test_u,result_file_test_l,V_INIT,simulation_or_not){
+return_result <- function(result_file_ul,
+                          result_file_lu,
+                          result_file_test_u,
+                          result_file_test_l,
+                          V_INIT,
+                          simulation_or_not){
   #シミュレーションの結果に応じてFの値とシミュレーション結果をリストで返す
 
   estimate_Result <- as.list(NULL)

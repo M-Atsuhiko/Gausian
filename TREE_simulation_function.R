@@ -58,13 +58,6 @@ TREE_simulation_function <- function(TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params
                                   V_INIT,
                                   TRUE)
 
-  ## Simul_Estimate <- estimate(Output_upper_lower,
-  ##                            Output_lower_upper,
-  ##                            Output_upper_test,
-  ##                            Output_lower_test,
-  ##                            V_INIT,
-  ##                            TREE)
-
 
   ul_data <- read.table(Output_upper_lower)
   lu_data <- read.table(Output_lower_upper)
@@ -88,11 +81,13 @@ TREE_simulation_function <- function(TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params
          xlab="time [ms]",
          ylab="soma membrame potential [mV]")
 
+
     lines(lu_data,col="red")
     lines(l_test_data,col="blue")
 
     lines(ul_data,col="blue")
     lines(u_test_data,col="red")
+
     ## par(lwd=4,
     ##     ps=20,
     ##     mfcol=c(1,2),

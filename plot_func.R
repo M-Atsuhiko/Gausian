@@ -7,6 +7,10 @@ plot_func <- function(Datas,
                       legend,
                       showMax){
   plot.new()
+  
+  par(lwd=3,
+      cex=1.4,
+      mex=1.2)
 
   mean_sd_max_Datas <- lapply(Datas,function(Data){
     return(rbind(apply(Data,2,mean),
