@@ -1,4 +1,11 @@
-plot_func <- function(Datas,Colors,row,filename,colname,rowname,legend){
+plot_func <- function(Datas,
+                      Colors,
+                      row,
+                      filename,
+                      colname,
+                      rowname,
+                      legend,
+                      showMax){
   plot.new()
 
   mean_sd_max_Datas <- lapply(Datas,function(Data){
@@ -9,11 +16,13 @@ plot_func <- function(Datas,Colors,row,filename,colname,rowname,legend){
 
   Max_Data <- max(sapply(mean_sd_max_Datas,function(Data){
     return(max(Data[1,] + Data[2,]))
-  }))
+  }),
+                  sapply(Datas,max)*showMax)
 
   Min_Data <- min(sapply(mean_sd_max_Datas,function(Data){
     return(min(Data[1,] - Data[2,]))
   }))
+
 
   plot(rbind(c(row[1],Min_Data),
              c(row[length(row)],Max_Data)),
@@ -42,10 +51,11 @@ plot_func <- function(Datas,Colors,row,filename,colname,rowname,legend){
       lines(cbind(row,means),
             col=color,
             lty=line_type)
-
-      lines(cbind(row,maxs),
-            col=color,
-            lty="dashed")
+      if(showMax){
+        lines(cbind(row,maxs),
+              col=color,
+              lty="dashed")
+      }
     }
   },mean_sd_max_Datas,
          Colors)
@@ -59,4 +69,5 @@ plot_func <- function(Datas,Colors,row,filename,colname,rowname,legend){
   }
 
   dev.copy2eps(file=filename)
+  cat("Output ->",filename,"\n")
 }
