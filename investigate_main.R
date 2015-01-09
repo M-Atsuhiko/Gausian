@@ -1,8 +1,10 @@
-Type <- "Tsuishi"
+Type <- "Gausian"
 
 source(paste(Type,"_Dendritic_function_parameter.R",sep=""))
 source("plot_func.R")
 source("./calc_syn_length_diameter.R")
+source("return_Upper_Lower_Other_i.R")
+source("plot_Conductance_distribution.R")
 
 par(lwd=3,
     cex=1.4,
@@ -13,12 +15,12 @@ output_dir <- paste("./",Type,"_Result/",sep="")
 WITH_K <- FALSE
 WITH_Ca <- TRUE
 
-RAND_SEED <- 1:5
+RAND_SEED <- 1:10
 DELTA_T <- seq(5,30,by=5)
 Function_ratio <- 75
 Conductance_ratio <- 0
 Morphology_ratio <- 100 - (Function_ratio + Conductance_ratio)
-extra_prefix <- paste("Rerative_liner_",Function_ratio,"_",Conductance_ratio,sep="")
+extra_prefix <- paste("Rerative_Gaus_",Function_ratio,"_",Conductance_ratio,sep="")
 
 if(WITH_K*WITH_Ca){
   name <- "k_ca"
@@ -31,8 +33,6 @@ if(WITH_K*WITH_Ca){
 cat("inciude conductance:",name,"\n")
 
 Data_Dir <- paste("./",name,"_Result/",sep="")
-
-Datas <- as.list(NULL)
 
 Fs <- c()
 TREE_lengths <- c()
@@ -52,11 +52,17 @@ Lower_Ca_maxs <- c()
 Upper_K_maxs <- c()
 Lower_K_maxs <- c()
 
-Upper_Synapse_length_diam <- c()
-Lower_Synapse_length_diam <- c()
+Upper_Synapse_length_diams <- c()
+Lower_Synapse_length_diams <- c()
+
+Upper_Ca_distribution <- as.list(NULL)
+Lower_Ca_distribution <- as.list(NULL)
+Upper_K_distribution <- as.list(NULL)
+Lower_K_distribution <- as.list(NULL)
 
 for(dt in DELTA_T){
   cat("Delta_T:",dt,"\n")
+  Datas <- as.list(NULL)
   Data_i <- 1
   for(sd in RAND_SEED){
     cat("SEED:",sd,"\n")
@@ -112,10 +118,10 @@ for(dt in DELTA_T){
                          })))
                        }))
 
-  Upper_Synapse_length_diam <- cbind(Upper_Synapse_length_diam,
+  Upper_Synapse_length_diams <- cbind(Upper_Synapse_length_diams,
                                      sapply(lapply(named_TREEs,"[[","Upper_Dend"),calc_syn_length_diameter))
   
-  Lower_Synapse_length_diam <- cbind(Lower_Synapse_length_diam,
+  Lower_Synapse_length_diams <- cbind(Lower_Synapse_length_diams,
                                      sapply(lapply(named_TREEs,"[[","Lower_Dend"),calc_syn_length_diameter))
   
   
@@ -148,7 +154,42 @@ for(dt in DELTA_T){
                                 Lower_Ca_amount_max[,1])
       Lower_Ca_maxs <- cbind(Lower_Ca_maxs,
                              Lower_Ca_amount_max[,2])
+
+      Upper_Distribution <- sapply(Datas,function(Data){
+        Upper_i <- return_Upper_Lower_Other_i(Data[["TREE"]])[["Upper_Dend"]]
+        Upper_TREE <- Data[["TREE"]][[Upper_i]]
+        Upper_Params <- Data[["Params"]][[Upper_i]]
+        if(Type == "Gausian"){
+          return(c(Upper_Params[["Ca_peak"]],
+                   Upper_Params[["Ca_Gaus_mean"]],
+                   Upper_Params[["Ca_Gaus_sd"]],
+                   Upper_TREE[[length(Upper_TREE)]][["path_leng"]]))
+        }else{
+          return(c(Upper_Params[["Ca_Stem_conductance"]],
+                   Upper_Params[["Ca_taper"]],
+                   Upper_TREE[[length(Upper_TREE)]][["path_leng"]]))
+        }
+      })
       
+      Upper_Ca_distribution[[length(Upper_Ca_distribution) + 1]] <- Upper_Distribution
+      
+      
+      Lower_Ca_distribution[[length(Lower_Ca_distribution) + 1]] <-
+        sapply(Datas,function(Data){
+          Lower_i <- return_Upper_Lower_Other_i(Data[["TREE"]])[["Lower_Dend"]]
+          Lower_TREE <- Data[["TREE"]][[Lower_i]]
+          Lower_Params <- Data[["Params"]][[Lower_i]]
+                    if(Type == "Gausian"){
+                      return(c(Lower_Params[["Ca_peak"]],
+                               Lower_Params[["Ca_Gaus_mean"]],
+                               Lower_Params[["Ca_Gaus_sd"]],
+                               Lower_TREE[[length(Lower_TREE)]][["path_leng"]]))
+                    }else{
+                      return(c(Lower_Params[["Ca_Stem_conductance"]],
+                               Lower_Params[["Ca_taper"]],
+                               Lower_TREE[[length(Lower_TREE)]][["path_leng"]]))
+                    }
+        })
     }
 
     if(WITH_K){
@@ -171,6 +212,40 @@ for(dt in DELTA_T){
                                      Lower_K_amount_max[,1])
       Lower_K_maxs <- cbind(Lower_K_amounts,
                                  Lower_K_amount_max[,2])
+      
+      Upper_K_distribution[[length(Upper_K_distribution) + 1]] <-
+        sapply(Datas,function(Data){
+          Upper_i <- return_Upper_Lower_Other_i(Data[["TREE"]])[["Upper_Dend"]]
+          Upper_TREE <- Data[["TREE"]][[Upper_i]]
+          Upper_Params <- Data[["Params"]][[Upper_i]]
+                    if(Type == "Gausian"){
+                      return(c(Upper_Params[["K_peak"]],
+                               Upper_Params[["K_Gaus_mean"]],
+                               Upper_Params[["K_Gaus_sd"]],
+                               Upper_TREE[[length(Upper_TREE)]][["path_leng"]]))
+                    }else{
+                      return(c(Upper_Params[["K_Stem_conductance"]],
+                               Upper_Params[["K_taper"]],
+                               Upper_TREE[[length(Upper_TREE)]][["path_leng"]]))
+                    }
+        })
+
+      Lower_K_distribution[[length(Lower_K_distribution) + 1]] <-
+        sapply(Datas,function(Data){
+          Lower_i <- return_Upper_Lower_Other_i(Data[["TREE"]])[["Lower_Dend"]]
+          Lower_TREE <- Data[["TREE"]][[Lower_i]]
+          Lower_Params <- Data[["Params"]][[Lower_i]]
+                    if(Type == "Gausian"){
+                      return(c(Lower_Params[["K_peak"]],
+                               Lower_Params[["K_Gaus_mean"]],
+                               Lower_Params[["K_Gaus_sd"]],
+                               Lower_TREE[[length(Lower_TREE)]][["path_leng"]]))
+                    }else{
+                      return(c(Lower_Params[["K_Stem_conductance"]],
+                               Lower_Params[["K_taper"]],
+                               Lower_TREE[[length(Lower_TREE)]][["path_leng"]]))
+                    }
+        })
     }
   }
 }
@@ -245,6 +320,7 @@ colnames(Upper_Diams) <- Label_Delta_T
 rownames(Lower_Diams) <- Label_SEED
 colnames(Lower_Diams) <- Label_Delta_T
 Diams <- list(Upper_Diams,Lower_Diams)
+names(Diams) <- c("Upper_Diam","Lower_Diam")
 showMax <- FALSE
 plot_func(Diams,color,DELTA_T,Filename,
           colname,
@@ -261,19 +337,20 @@ color <- c("red","blue")
 legend <- cbind(c("Red Dendrite","Blue Dendrite"),
                 c("red","blue"),
                 c(line_type,line_type))
-rownames(Upper_Synapse_length_diam) <- Label_SEED
-colnames(Upper_Synapse_length_diam) <- Label_Delta_T
-rownames(Lower_Synapse_length_diam) <- Label_SEED
-colnames(Lower_Synapse_length_diam) <- Label_Delta_T
-Synapse_length_diam <- list(Upper_Synapse_length_diam,Lower_Synapse_length_diam)
+rownames(Upper_Synapse_length_diams) <- Label_SEED
+colnames(Upper_Synapse_length_diams) <- Label_Delta_T
+rownames(Lower_Synapse_length_diams) <- Label_SEED
+colnames(Lower_Synapse_length_diams) <- Label_Delta_T
+Synapse_length_diams <- list(Upper_Synapse_length_diams,Lower_Synapse_length_diams)
+names(Synapse_length_diams) <- c("Upper_Synapse_length_diams","Lower_Synapse_length_diams")
 showMax <- FALSE
-plot_func(Synapse_length_diam,color,DELTA_T,Filename,
+plot_func(Synapse_length_diams,color,DELTA_T,Filename,
           colname,
           rowname,
           legend,
           showMax)
-Filename <- paste(prefix,"Synapse_length_diam.xdr",sep="")
-save(Synapse_length_diam,file=Filename)
+Filename <- paste(prefix,"Synapse_length_diams.xdr",sep="")
+save(Synapse_length_diams,file=Filename)
 ##########################
 
 colname <-paste("Number of Synapses")
@@ -287,6 +364,7 @@ colnames(N_Upper_Syns) <- Label_Delta_T
 rownames(N_Lower_Syns) <- Label_SEED
 colnames(N_Lower_Syns) <- Label_Delta_T
 Synapses <- list(N_Upper_Syns,N_Lower_Syns)
+names(Synapses) <- c("N_Upper_Syns","N_Lower_Syns")
 showMax <- FALSE
 plot_func(Synapses,color,DELTA_T,Filename,
           colname,
@@ -302,6 +380,11 @@ if(WITH_Ca){
   colnames(Upper_Ca_amounts) <- Label_Delta_T
   rownames(Lower_Ca_amounts) <- Label_SEED
   colnames(Lower_Ca_amounts) <- Label_Delta_T
+
+  rownames(Upper_Ca_maxs) <- Label_SEED
+  colnames(Upper_Ca_maxs) <- Label_Delta_T
+  rownames(Lower_Ca_maxs) <- Label_SEED
+  colnames(Lower_Ca_maxs) <- Label_Delta_T
   
   colname <-paste("Ca Conductance ratio")
   Filename <- paste(prefix,"Ca_conductance_ratio.eps",sep="")
@@ -311,6 +394,7 @@ if(WITH_Ca){
                 c(line_type,line_type))
   
   Ca_Ratios <- list(Upper_Ca_amounts/Upper_Ca_maxs,Lower_Ca_amounts/Lower_Ca_maxs)
+  names(Ca_Ratios) <- c("Upper_Ca_ratios","Lower_Ca_ratios")
   showMax <- FALSE
   plot_func(Ca_Ratios,color,DELTA_T,Filename,
             colname,
@@ -329,6 +413,7 @@ if(WITH_Ca){
                   c("red","blue"),
                   c(line_type,line_type))
   Ca_amounts <- list(Upper_Ca_amounts,Upper_Ca_maxs,Lower_Ca_amounts,Lower_Ca_maxs)
+  names(Ca_amounts) <- c("Upper_Ca_amounts","Upper_Ca_maxs","Lower_Ca_amounts","Lower_Ca_maxs")
   showMax <- FALSE
   plot_func(list(Ca_amounts[[1]],Ca_amounts[[3]]),color,DELTA_T,Filename,
             colname,
@@ -337,15 +422,42 @@ if(WITH_Ca){
             showMax)
   Filename <- paste(prefix,"Ca_amount.xdr",sep="")
   save(Ca_amounts,file=Filename)
+
+##########################
+
+  filename_prefix <- paste(prefix,"Ca_distribution_",sep="")
+  mainName <- "Ca distribution"
+  colname <- expression(paste("[S/c",m^2,"]",sep=""))
+  rowname <- expression(paste("Dendrite length [",mu,"m]",sep=""))
+  mapply(function(Upper_Conductance,Lower_Conductance,delta_t){
+    main <- paste(delta_t,"ms ",mainName,sep="")
+    Filename <- paste(filename_prefix,"dt",delta_t,".eps",sep="")
+    plot_Conductance_distribution(Upper_Conductance,
+                                  Lower_Conductance,
+                                  main,
+                                  colname,
+                                  rowname,
+                                  Filename,
+                                  TRUE)},
+         Upper_Ca_distribution,Lower_Ca_distribution,DELTA_T)
 }
 
 ##########################
 
 if(WITH_K){
+  names(Upper_K_amounts) <- "Upper_K_amounts"
+  names(Lower_K_amounts) <- "Lower_K_amounts"
   rownames(Upper_K_amounts) <- Label_SEED
   colnames(Upper_K_amounts) <- Label_Delta_T
   rownames(Lower_K_amounts) <- Label_SEED
   colnames(Lower_K_amounts) <- Label_Delta_T
+
+  names(Upper_K_maxs) <- "Upper_K_maxs"
+  names(Lower_K_maxs) <- "Lower_K_maxs"
+  rownames(Upper_K_maxs) <- Label_SEED
+  colnames(Upper_K_maxs) <- Label_Delta_T
+  rownames(Lower_K_maxs) <- Label_SEED
+  colnames(Lower_K_maxs) <- Label_Delta_T
   
   colname <-paste("K Conductance ratio")
   Filename <- paste(prefix,"K_conductance_ratio.eps",sep="")
@@ -354,6 +466,7 @@ if(WITH_K){
                 c("red","blue"),
                 c(line_type,line_type))
   K_Ratios <- list(Upper_K_amounts/Upper_K_maxs,Lower_K_amounts/Lower_K_maxs)
+  names(K_Ratios) <- c("Upper_K_ratios","Lower_K_ratios")
   showMax <- FALSE
   plot_func(K_Ratios,color,DELTA_T,Filename,
             colname,
@@ -371,6 +484,7 @@ if(WITH_K){
                   c("red","blue"),
                   c(line_type,line_type))
   K_amounts <- list(Upper_K_amounts,Upper_K_maxs,Lower_K_amounts,Lower_K_maxs)
+  names(K_amounts) <- c("Upper_K_amounts","Upper_K_maxs","Lower_K_amounts","Lower_K_maxs")
   showMax <- FALSE
   plot_func(list(K_amounts[[1]],K_amounts[[3]]),color,DELTA_T,Filename,
             colname,

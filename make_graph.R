@@ -58,10 +58,10 @@ make_F_graph <- function(property,lineColor,point_mk,output_file){
   }
   
   par(lty="solid",xpd=TRUE)
- legend(par()$usr[2],par()$usr[4],legend=property,
-        col=lineColor,
-        lty=rep("solid",length(property)),
-        pch=point_mk)
+  legend(par()$usr[2],par()$usr[4],legend=property,
+         col=lineColor,
+         lty=rep("solid",length(property)),
+         pch=point_mk)
 
   output_file <- paste(Output_Dir,"all_Function.eps",sep="")
   cat("output_file:",output_file,"\n")

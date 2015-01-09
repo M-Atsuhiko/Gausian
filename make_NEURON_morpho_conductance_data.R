@@ -1,4 +1,3 @@
-
 pt3dadd <- function(x,y,z,diam,output){
   writeLines(paste("    pt3dadd(",x,", ",y,", ",z,", ",diam,")",sep=""),output,sep="\n")
 }

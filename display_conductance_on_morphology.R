@@ -48,7 +48,7 @@ display_dendrite_conductance <- function(Dendrite,Color,max_conductance,conducta
     diam <- Dendrite[[i]][["diam"]]
     ratio <- Dendrite[[i]][[conductance]]/max_conductance
     #ratioにあわせて薄くする
-    Dendrite_cyl <- cylinder3d(Branch_coordinate,closed = -2,radius = diam,sides = 100)
+    Dendrite_cyl <- cylinder3d(Branch_coordinate,closed = -2,radius = diam/2,sides = 100)
     #コンダクタンスが多いほど赤く、少ないほど青く表示する
     shade3d(Dendrite_cyl,color = rgb(ratio,0,(1 - ratio)),override=TRUE)
   }

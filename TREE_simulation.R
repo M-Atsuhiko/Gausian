@@ -12,8 +12,8 @@ source(paste(Dir,"Stem_diam.R",sep=""))
 
 WITH_K <- FALSE
 WITH_Ca <- TRUE
-RAND_SEED <- 3
-DELTA_T <- 25
+RAND_SEED <- 1
+DELTA_T <- 5
 Function_ratio <- 75
 Conductance_ratio <- 5
 Morphology_ratio <- 100 - (Function_ratio + Conductance_ratio*(WITH_K || WITH_Ca))
