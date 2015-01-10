@@ -1,4 +1,4 @@
-Type <- "Gausian"
+Type <- "Tsuishi"
 
 source(paste(Type,"_Dendritic_function_parameter.R",sep=""))
 source("plot_func.R")
@@ -15,12 +15,19 @@ output_dir <- paste("./",Type,"_Result/",sep="")
 WITH_K <- FALSE
 WITH_Ca <- TRUE
 
+if(Type == "Gausian"){
+  isGausian <- TRUE
+}else{
+  isGausian <- FALSE
+}
+
+
 RAND_SEED <- 1:10
 DELTA_T <- seq(5,30,by=5)
 Function_ratio <- 75
 Conductance_ratio <- 0
 Morphology_ratio <- 100 - (Function_ratio + Conductance_ratio)
-extra_prefix <- paste("Rerative_Gaus_",Function_ratio,"_",Conductance_ratio,sep="")
+extra_prefix <- paste("Tsuishi_alfa05_")#,Function_ratio,"_",Conductance_ratio,sep="")
 
 if(WITH_K*WITH_Ca){
   name <- "k_ca"
@@ -159,7 +166,8 @@ for(dt in DELTA_T){
         Upper_i <- return_Upper_Lower_Other_i(Data[["TREE"]])[["Upper_Dend"]]
         Upper_TREE <- Data[["TREE"]][[Upper_i]]
         Upper_Params <- Data[["Params"]][[Upper_i]]
-        if(Type == "Gausian"){
+        
+        if(isGausian){
           return(c(Upper_Params[["Ca_peak"]],
                    Upper_Params[["Ca_Gaus_mean"]],
                    Upper_Params[["Ca_Gaus_sd"]],
@@ -167,6 +175,7 @@ for(dt in DELTA_T){
         }else{
           return(c(Upper_Params[["Ca_Stem_conductance"]],
                    Upper_Params[["Ca_taper"]],
+                   Upper_Params[["Length_MIEW"]],
                    Upper_TREE[[length(Upper_TREE)]][["path_leng"]]))
         }
       })
@@ -179,7 +188,7 @@ for(dt in DELTA_T){
           Lower_i <- return_Upper_Lower_Other_i(Data[["TREE"]])[["Lower_Dend"]]
           Lower_TREE <- Data[["TREE"]][[Lower_i]]
           Lower_Params <- Data[["Params"]][[Lower_i]]
-                    if(Type == "Gausian"){
+                    if(isGausian){
                       return(c(Lower_Params[["Ca_peak"]],
                                Lower_Params[["Ca_Gaus_mean"]],
                                Lower_Params[["Ca_Gaus_sd"]],
@@ -187,6 +196,7 @@ for(dt in DELTA_T){
                     }else{
                       return(c(Lower_Params[["Ca_Stem_conductance"]],
                                Lower_Params[["Ca_taper"]],
+                               Lower_Params[["Length_MIEW"]],
                                Lower_TREE[[length(Lower_TREE)]][["path_leng"]]))
                     }
         })
@@ -218,7 +228,7 @@ for(dt in DELTA_T){
           Upper_i <- return_Upper_Lower_Other_i(Data[["TREE"]])[["Upper_Dend"]]
           Upper_TREE <- Data[["TREE"]][[Upper_i]]
           Upper_Params <- Data[["Params"]][[Upper_i]]
-                    if(Type == "Gausian"){
+                    if(isGausian){
                       return(c(Upper_Params[["K_peak"]],
                                Upper_Params[["K_Gaus_mean"]],
                                Upper_Params[["K_Gaus_sd"]],
@@ -226,6 +236,7 @@ for(dt in DELTA_T){
                     }else{
                       return(c(Upper_Params[["K_Stem_conductance"]],
                                Upper_Params[["K_taper"]],
+                               Upper_Params[["Length_MIEW"]],
                                Upper_TREE[[length(Upper_TREE)]][["path_leng"]]))
                     }
         })
@@ -235,7 +246,7 @@ for(dt in DELTA_T){
           Lower_i <- return_Upper_Lower_Other_i(Data[["TREE"]])[["Lower_Dend"]]
           Lower_TREE <- Data[["TREE"]][[Lower_i]]
           Lower_Params <- Data[["Params"]][[Lower_i]]
-                    if(Type == "Gausian"){
+                    if(isGausian){
                       return(c(Lower_Params[["K_peak"]],
                                Lower_Params[["K_Gaus_mean"]],
                                Lower_Params[["K_Gaus_sd"]],
@@ -243,6 +254,7 @@ for(dt in DELTA_T){
                     }else{
                       return(c(Lower_Params[["K_Stem_conductance"]],
                                Lower_Params[["K_taper"]],
+                               Lower_Params[["Length_MIEW"]],
                                Lower_TREE[[length(Lower_TREE)]][["path_leng"]]))
                     }
         })
@@ -438,7 +450,8 @@ if(WITH_Ca){
                                   colname,
                                   rowname,
                                   Filename,
-                                  TRUE)},
+                                  isGausian,
+                                  Ca_MAX)},
          Upper_Ca_distribution,Lower_Ca_distribution,DELTA_T)
 }
 
