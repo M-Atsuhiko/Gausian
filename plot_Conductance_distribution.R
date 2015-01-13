@@ -1,5 +1,15 @@
-plot_Conductance_distribution <- function(Upper_Data,Lower_Data,mainName,colname,rowname,filename,isGausian,Conductance_Max){
+plot_Conductance_distribution <- function(Upper_Data,
+                                          Lower_Data,
+                                          mainName,
+                                          colname,
+                                          rowname,
+                                          filename,
+                                          isGausian,
+                                          Conductance_Max){
   frame()
+
+  par(oma=c(0,0,0,5),
+      xpd=NA)
   if(isGausian){
 
     Max_peak <- max(Upper_Data[1,],Lower_Data[1,])
@@ -60,9 +70,11 @@ plot_Conductance_distribution <- function(Upper_Data,Lower_Data,mainName,colname
           lty="dashed")
 
     par(new=TRUE)
-
+    
+    legend_data <- c()
+    
     for(col_i in 1:ncol(Upper_Data)){
-      if(col_i < 10){
+      if(col_i < 9){
         linetype <- "solid"
       }else{
         linetype <- "dotdash"
@@ -72,6 +84,11 @@ plot_Conductance_distribution <- function(Upper_Data,Lower_Data,mainName,colname
       Gaus_mean <- upper_col[2]
       Gaus_sd <- upper_col[3]
       path_leng <- upper_col[4]
+      Ratio <- upper_col[5]
+
+      legend_data <- rbind(legend_data,
+                           c(col_i,linetype,round(Ratio,digits=3)))
+      
       Gaus_peak <- dnorm(Gaus_mean,mean=Gaus_mean,sd=Gaus_sd)
       curve((dnorm(x/path_leng,mean=Gaus_mean,sd=Gaus_sd)/Gaus_peak)*peak,
             0,path_leng,
@@ -100,7 +117,6 @@ plot_Conductance_distribution <- function(Upper_Data,Lower_Data,mainName,colname
       par(new=TRUE)
     }
   }else{ #線形分布の場合
-
     Max_peak <- max(apply(Upper_Data,2,function(dataCol){
       Stem_amount <- dataCol[1]
       taper <- dataCol[2]
@@ -173,8 +189,10 @@ plot_Conductance_distribution <- function(Upper_Data,Lower_Data,mainName,colname
 
     par(new=TRUE)
 
+    legend_data <- c()
+
     for(col_i in 1:ncol(Upper_Data)){
-      if(col_i < 10){
+      if(col_i < 9){
         linetype <- "solid"
       }else{
         linetype <- "dotdash"
@@ -184,6 +202,11 @@ plot_Conductance_distribution <- function(Upper_Data,Lower_Data,mainName,colname
       taper <- Upper_Data[,col_i][2]
       length <- Upper_Data[,col_i][3]
       path_length <- Upper_Data[,col_i][4]
+      Ratio <- Upper_Data[,col_i][5]
+      
+      legend_data <- rbind(legend_data,
+                           c(col_i,linetype,round(Ratio,digits=3)))
+      
       N_branch <- path_length/length
       Lengths_Conductances <- rbind(c(0,0),
                                     t(sapply(1:N_branch,function(branch_i){
@@ -214,7 +237,15 @@ plot_Conductance_distribution <- function(Upper_Data,Lower_Data,mainName,colname
     }
   }
 
+  legend(par()$usr[2],par()$usr[4],
+         legend=mapply(function(name,F){
+           return(paste("No ",name,", F:",F,sep=""))},
+           legend_data[,1],legend_data[,3]),
+         col=legend_data[,1],
+         lty=legend_data[,2])
+
   dev.copy2eps(file=filename)
   cat("Output ->",filename,"\n")
-  par(new=FALSE)
+  par(new=FALSE,
+      oma=c(0,0,0,0))
 }

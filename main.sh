@@ -15,21 +15,21 @@ fi
 # #mmmmm m"  "m #mmmmm  "mmm" "mmmm"   #    #mmmmm
 
 # 実行中
-# excuse time   | server| type    | seed   | dt     | suffix               |
+# excuse time   | server| type     | seed   | dt     | suffix               |
 # ------------------------------------------------------------------------------
-# (1/9 13:40~)  | hal1  | ca      | (1:10) | (5:30) | Determine_Gaus_100_0 | F:100 C:0
-# (1/7 16:30~)  | hal2  | ca      | (1:10) | (5:30) | Rerative_Gaus_75_10  | F:75 C:10
-# (1/8 19:35~)  | hal3  | k       | (1:10) | (5:30) | Rerative_liner_75_0  | F:75 C:0 #追試だが、結構結果が違う
-# (1/8 17:50~)  | hal4  | ca      | (1:10) | (5:30) | Rerative_Gaus_75_0   | F:75 C:0 #形態評価の部分が間違っていたのでもう一回まわす
+# (1/12 15:10~)  | hal1  | k       | (1:10) | (5:30) | Determine_Gaus_75_0  | F:75 C:0
+# (1/12 16:30~)  | hal2  | ca      | (1:10) | (5:30) | Determine_Gaus_75_5  | F:75 C:5
+# (1/13 11:00~)  | hal3  | k       | (1:10) | (5:30) | Rerative_liner_90_0  | F:90 C:0
+# (1/12 16:40~)  | hal4  | k       | (1:10) | (5:30) | Tsuishi_alfa_05      | alfa05
 
 # (12/17)  | iMac  | passive | ()           | F:75
 
 SEED=(1 2 3 4 5 6 7 8 9 10)
 DELTA_T=(5 10 15 20 25 30)
-CONTAIN_CONDUCTANCES="ca"
-Function_Ratio="100"                   #ここでFunction_Ratioを変更できる
+CONTAIN_CONDUCTANCES="k"
+Function_Ratio="90"                   #ここでFunction_Ratioを変更できる
 Conductance_Ratio="0"
-Spesific="Determine_Gaus_"${Function_Ratio}"_"${Conductance_Ratio}     #その他のprefix
+Spesific="Rerative_liner_"${Function_Ratio}"_"${Conductance_Ratio}     #その他のprefix
 
 for se in ${SEED[@]}
 do
