@@ -20,6 +20,5 @@ calc_Conductance_amount <- function(TREE){
       Max_Ca_Conductance <- Max_Ca_Conductance + surface*Ca_MAX
     }
   }
-
   return(c(All_K_Conductance,All_Ca_Conductance,Max_K_Conductance,Max_Ca_Conductance))
 }

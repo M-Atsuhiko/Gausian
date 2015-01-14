@@ -1,10 +1,17 @@
 Type <- "Gausian"
 
+if(Type == "Gausian"){
+  isGausian <- TRUE
+}else{
+  isGausian <- FALSE
+}
+
 source(paste(Type,"_Dendritic_function_parameter.R",sep=""))
 source("plot_func.R")
 source("./calc_syn_length_diameter.R")
 source("return_Upper_Lower_Other_i.R")
 source("plot_Conductance_distribution.R")
+library(colorspace)
 
 par(lwd=3,
     cex=1.4,
@@ -13,21 +20,14 @@ par(lwd=3,
 output_dir <- paste("./",Type,"_Result/",sep="")
 
 WITH_K <- FALSE
-WITH_Ca <- TRUE
-
-if(Type == "Gausian"){
-  isGausian <- TRUE
-}else{
-  isGausian <- FALSE
-}
-
+WITH_Ca <- FALSE
 
 RAND_SEED <- 1:10
 DELTA_T <- seq(5,30,by=5)
 Function_ratio <- 75
-Conductance_ratio <- 10
+Conductance_ratio <- 0
 Morphology_ratio <- 100 - (Function_ratio + Conductance_ratio)
-extra_prefix <- paste("Rerative_Gaus_",Function_ratio,"_",Conductance_ratio,sep="")
+extra_prefix <- paste("Rerative_",Function_ratio,"_",Conductance_ratio,sep="")
 
 if(WITH_K*WITH_Ca){
   name <- "k_ca"
@@ -156,19 +156,21 @@ for(dt in DELTA_T){
   
   divided_named_TREEs <- list()
 
-  for(Data_i in 1:length(Datas)){
-    divided_named_TREEs[[Data_i]] <- set_Upper_or_Lower_or_Other(
-      divid_and_set_conductance(Datas[[Data_i]][["TREE"]],Datas[[Data_i]][["Params"]]))
-  }
+  Datas <- lapply(Datas,function(Data){
+    Data[["TREE"]] <- divid_and_set_conductance(Data[["TREE"]],Data[["Params"]])
+    return(Data)
+  })
+
+  divided_named_TREEs <- lapply(lapply(Datas,"[[","TREE"),set_Upper_or_Lower_or_Other)
   
   Upper_Ca_amount_max <- t(sapply(lapply(divided_named_TREEs,"[[","Upper_Dend"),function(TREE){
-    Conductance_amont <- calc_Conductance_amount(TREE)
-    return(c(Conductance_amont[2],Conductance_amont[4]))
+    Conductance_amount <- calc_Conductance_amount(TREE)
+    return(c(Conductance_amount[2],Conductance_amount[4]))
   }))
 
   Lower_Ca_amount_max <- t(sapply(lapply(divided_named_TREEs,"[[","Lower_Dend"),function(TREE){
-    Conductance_amont <- calc_Conductance_amount(TREE)
-    return(c(Conductance_amont[2],Conductance_amont[4]))
+    Conductance_amount <- calc_Conductance_amount(TREE)
+    return(c(Conductance_amount[2],Conductance_amount[4]))
   }))
 
   Upper_Ca_amounts <- cbind(Upper_Ca_amounts,
@@ -181,61 +183,51 @@ for(dt in DELTA_T){
   Lower_Ca_maxs <- cbind(Lower_Ca_maxs,
                          Lower_Ca_amount_max[,2])
 
-  Upper_Distribution <- sapply(Datas,function(Data){
+  Upper_Distribution <- lapply(Datas,function(Data){
     Upper_i <- return_Upper_Lower_Other_i(Data[["TREE"]])[["Upper_Dend"]]
+    if(length(Upper_i) > 1)warning("the Number of upper Dendrite is over 2")
     Upper_TREE <- Data[["TREE"]][[Upper_i]]
-    Upper_Params <- Data[["Params"]][[Upper_i]]
     Ratio <- Data[["Ratio"]]
-    if(isGausian){
-      return(c(Upper_Params[["Ca_peak"]],
-               Upper_Params[["Ca_Gaus_mean"]],
-               Upper_Params[["Ca_Gaus_sd"]],
-               Upper_TREE[[length(Upper_TREE)]][["path_leng"]],
-               Ratio))
-    }else{
-      return(c(Upper_Params[["Ca_Stem_conductance"]],
-               Upper_Params[["Ca_taper"]],
-               Upper_Params[["Length_MIEW"]],
-               Upper_TREE[[length(Upper_TREE)]][["path_leng"]],
-               Ratio))
-    }
+    return(list(Ratio,
+                rbind(sapply(Upper_TREE,"[[","path_leng"),
+                      sapply(Upper_TREE,"[[","length"),
+                      sapply(Upper_TREE,"[[","Ca_conductance"),
+                      sapply(Upper_TREE,function(Branch){
+                      if(is.matrix(Branch[["synapse"]])) return(1)
+                      else return(0)}))))
   })
   
   Upper_Ca_distribution[[length(Upper_Ca_distribution) + 1]] <- Upper_Distribution
-  
-  Lower_Ca_distribution[[length(Lower_Ca_distribution) + 1]] <-
-    sapply(Datas,function(Data){
-      Lower_i <- return_Upper_Lower_Other_i(Data[["TREE"]])[["Lower_Dend"]]
-      Lower_TREE <- Data[["TREE"]][[Lower_i]]
-      Lower_Params <- Data[["Params"]][[Lower_i]]
-      Ratio <- Data[["Ratio"]]        
-      if(isGausian){
-        return(c(Lower_Params[["Ca_peak"]],
-                 Lower_Params[["Ca_Gaus_mean"]],
-                 Lower_Params[["Ca_Gaus_sd"]],
-                 Lower_TREE[[length(Lower_TREE)]][["path_leng"]],
-                 Ratio))
-      }else{
-        return(c(Lower_Params[["Ca_Stem_conductance"]],
-                 Lower_Params[["Ca_taper"]],
-                 Lower_Params[["Length_MIEW"]],
-                 Lower_TREE[[length(Lower_TREE)]][["path_leng"]],
-                 Ratio))
-      }
-    })
-  
+
+  Lower_Distribution <- lapply(Datas,function(Data){
+    Lower_i <- return_Upper_Lower_Other_i(Data[["TREE"]])[["Lower_Dend"]]
+    if(length(Lower_i) > 1)warning("the Number of upper Dendrite is over 2")
+    Lower_TREE <- Data[["TREE"]][[Lower_i]]
+    Ratio <- Data[["Ratio"]]
+    return(list(Ratio,
+                rbind(sapply(Lower_TREE,"[[","path_leng"),#Lowerは負の値にする
+                      sapply(Lower_TREE,"[[","length"),
+                      sapply(Lower_TREE,"[[","Ca_conductance"),
+                      sapply(Lower_TREE,function(Branch){
+                      if(is.matrix(Branch[["synapse"]])) return(1)
+                      else return(0)}))))
+  })
+
+  Lower_Ca_distribution[[length(Lower_Ca_distribution) + 1]] <- Lower_Distribution
+
   Upper_K_amount_max <- t(sapply(lapply(divided_named_TREEs,"[[","Upper_Dend"),function(TREE){
-    Conductance_amont <- calc_Conductance_amount(TREE)
-    return(c(Conductance_amont[1],Conductance_amont[3]))
+    Conductance_amount <- calc_Conductance_amount(TREE)
+    return(c(Conductance_amount[1],Conductance_amount[3]))
   }))
 
   Lower_K_amount_max <- t(sapply(lapply(divided_named_TREEs,"[[","Lower_Dend"),function(TREE){
-    Conductance_amont <- calc_Conductance_amount(TREE)
-    return(c(Conductance_amont[1],Conductance_amont[3]))
+    Conductance_amount <- calc_Conductance_amount(TREE)
+    return(c(Conductance_amount[1],Conductance_amount[3]))
   }))
 
   Upper_K_amounts <- cbind(Upper_K_amounts,
                            Upper_K_amount_max[,1])
+
   Upper_K_maxs <- cbind(Upper_K_maxs,
                         Upper_K_amount_max[,2])
 
@@ -244,49 +236,37 @@ for(dt in DELTA_T){
   Lower_K_maxs <- cbind(Lower_K_maxs,
                         Lower_K_amount_max[,2])
 
-  Upper_Distribution <- sapply(Datas,function(Data){
+  Upper_Distribution <- lapply(Datas,function(Data){
     Upper_i <- return_Upper_Lower_Other_i(Data[["TREE"]])[["Upper_Dend"]]
+    if(length(Upper_i) > 1)warning("the Number of upper Dendrite is over 2")
     Upper_TREE <- Data[["TREE"]][[Upper_i]]
-    Upper_Params <- Data[["Params"]][[Upper_i]]
     Ratio <- Data[["Ratio"]]
-    if(isGausian){
-      return(c(Upper_Params[["K_peak"]],
-               Upper_Params[["K_Gaus_mean"]],
-               Upper_Params[["K_Gaus_sd"]],
-               Upper_TREE[[length(Upper_TREE)]][["path_leng"]],
-               Ratio))
-    }else{
-      return(c(Upper_Params[["K_Stem_conductance"]],
-               Upper_Params[["K_taper"]],
-               Upper_Params[["Length_MIEW"]],
-               Upper_TREE[[length(Upper_TREE)]][["path_leng"]],
-               Ratio))
-    }
+    return(list(Ratio,
+                rbind(sapply(Upper_TREE,"[[","path_leng"),
+                      sapply(Upper_TREE,"[[","length"),
+                      sapply(Upper_TREE,"[[","K_conductance"),
+                      sapply(Upper_TREE,function(Branch){
+                      if(is.matrix(Branch[["synapse"]])) return(1)
+                      else return(0)}))))
   })
   
   Upper_K_distribution[[length(Upper_K_distribution) + 1]] <- Upper_Distribution
-  
-  
-  Lower_K_distribution[[length(Lower_K_distribution) + 1]] <-
-    sapply(Datas,function(Data){
-      Lower_i <- return_Upper_Lower_Other_i(Data[["TREE"]])[["Lower_Dend"]]
-      Lower_TREE <- Data[["TREE"]][[Lower_i]]
-      Lower_Params <- Data[["Params"]][[Lower_i]]
-      Ratio <- Data[["Ratio"]]        
-      if(isGausian){
-        return(c(Lower_Params[["K_peak"]],
-                 Lower_Params[["K_Gaus_mean"]],
-                 Lower_Params[["K_Gaus_sd"]],
-                 Lower_TREE[[length(Lower_TREE)]][["path_leng"]],
-                 Ratio))
-      }else{
-        return(c(Lower_Params[["K_Stem_conductance"]],
-                 Lower_Params[["K_taper"]],
-                 Lower_Params[["Length_MIEW"]],
-                 Lower_TREE[[length(Lower_TREE)]][["path_leng"]],
-                 Ratio))
-      }
-    })
+
+  Lower_Distribution <- lapply(Datas,function(Data){
+    Lower_i <- return_Upper_Lower_Other_i(Data[["TREE"]])[["Lower_Dend"]]
+    if(length(Lower_i) > 1)warning("the Number of upper Dendrite is over 2")
+    Lower_TREE <- Data[["TREE"]][[Lower_i]]
+    Ratio <- Data[["Ratio"]]
+    return(list(Ratio,
+                rbind(sapply(Lower_TREE,"[[","path_leng"),
+                      sapply(Lower_TREE,"[[","length"),
+                      sapply(Lower_TREE,"[[","K_conductance"),
+                      sapply(Lower_TREE,function(Branch){
+                      if(is.matrix(Branch[["synapse"]])) return(1)
+                      else return(0)}))))
+  })
+
+  Lower_K_distribution[[length(Lower_K_distribution) + 1]] <- Lower_Distribution
 }
 
 prefix <- paste(output_dir,name,"_",extra_prefix,"_",sep="")
@@ -514,7 +494,7 @@ if(WITH_Ca){
 
 colname <-paste("Ca Conductance amount")
 Filename <- paste(prefix,"TREE_Ca_conductance_amount.eps",sep="")
-color <- c("black")
+color <- c("red")
 legend <- c()
 TREE_Ca_amounts <- Ca_amounts[["Upper_Ca_amounts"]] + Ca_amounts[["Lower_Ca_amounts"]]
 showMax <- FALSE
@@ -530,7 +510,7 @@ if(WITH_Ca){
 
 colname <-paste("Ca Conductance_ratio")
 Filename <- paste(prefix,"TREE_Ca_conductance_ratio.eps",sep="")
-color <- c("black")
+color <- c("red")
 legend <- c()
 TREE_Ca_maxs <- Ca_amounts[["Upper_Ca_maxs"]] + Ca_amounts[["Lower_Ca_maxs"]]
 TREE_Ca_ratios <- TREE_Ca_amounts/TREE_Ca_maxs
@@ -553,13 +533,13 @@ mapply(function(Upper_Conductance,Lower_Conductance,delta_t){
   Filename <- paste(filename_prefix,"dt",delta_t,".eps",sep="")
   if(WITH_Ca){
     plot_Conductance_distribution(Upper_Conductance,
-                                  Lower_Conductance,
-                                  main,
-                                  colname,
-                                  rowname,
-                                  Filename,
-                                  isGausian,
-                                  Ca_MAX)
+                                   Lower_Conductance,
+                                   main,
+                                   colname,
+                                   rowname,
+                                   Filename,
+                                   isGausian,
+                                   Ca_MAX)
   }},
        Upper_Ca_distribution,Lower_Ca_distribution,DELTA_T)
 
@@ -597,7 +577,6 @@ if(WITH_K){
   Filename <- paste(prefix,"K_ratio.xdr",sep="")
   save(K_Ratios,file=Filename)
 }
-
 ##########################
 
 colname <-paste("K Conductance amount")
@@ -624,7 +603,7 @@ if(WITH_K){
 
 colname <-paste("K Conductance amount")
 Filename <- paste(prefix,"TREE_K_conductance_amount.eps",sep="")
-color <- c("black")
+color <- c("red")
 legend <- c()
 TREE_K_amounts <- K_amounts[["Upper_K_amounts"]] + K_amounts[["Lower_K_amounts"]]
 showMax <- FALSE
@@ -640,7 +619,7 @@ if(WITH_K){
 
 colname <-paste("K Conductance_ratio")
 Filename <- paste(prefix,"TREE_K_conductance_ratio.eps",sep="")
-color <- c("black")
+color <- c("red")
 legend <- c()
 TREE_K_maxs <- K_amounts[["Upper_K_maxs"]] + K_amounts[["Lower_K_maxs"]]
 TREE_K_ratios <- TREE_K_amounts/TREE_K_maxs
@@ -659,18 +638,17 @@ mainName <- "K distribution"
 colname <- expression(paste("[S/c",m^2,"]",sep=""))
 rowname <- expression(paste("Dendrite length [",mu,"m]",sep=""))
 mapply(function(Upper_Conductance,Lower_Conductance,delta_t){
-  
   main <- paste(delta_t,"ms ",mainName,sep="")
   Filename <- paste(filename_prefix,"dt",delta_t,".eps",sep="")
   if(WITH_K){
     plot_Conductance_distribution(Upper_Conductance,
-                                  Lower_Conductance,
-                                  main,
-                                  colname,
-                                  rowname,
-                                  Filename,
-                                  isGausian,
-                                  K_MAX)
+                                   Lower_Conductance,
+                                   main,
+                                   colname,
+                                   rowname,
+                                   Filename,
+                                   isGausian,
+                                   K_MAX)
   }},
        Upper_K_distribution,Lower_K_distribution,DELTA_T)
 
@@ -817,7 +795,6 @@ ALL_DATA_FRAME <- data.frame(DT=All_dt,
                              Lower_K_amount=All_Lower_K_amounts,
                              Lower_K_max=All_Lower_K_maxs
                              )
-
-print(ALL_DATA_FRAME)
 Filename <- paste(prefix,"All_Data_FRAME.xdr",sep="")
 save(ALL_DATA_FRAME,file=Filename)
+cat("saved:",Filename,"\n")

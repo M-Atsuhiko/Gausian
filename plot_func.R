@@ -8,9 +8,9 @@ plot_func <- function(Datas,
                       showMax){
   plot.new()
   
-  par(lwd=3,
-      cex=1.4,
-      mex=1.2)
+  former_par <- par(lwd=3,
+                    cex=1.4,
+                    mex=1.2)
 
   mean_sd_max_Datas <- lapply(Datas,function(Data){
     return(rbind(apply(Data,2,mean),
@@ -26,8 +26,6 @@ plot_func <- function(Datas,
   Min_Data <- min(sapply(mean_sd_max_Datas,function(Data){
     return(min(Data[1,] - Data[2,]))
   }))
-
-
   plot(rbind(c(row[1],Min_Data),
              c(row[length(row)],Max_Data)),
        type="n",
@@ -74,4 +72,5 @@ plot_func <- function(Datas,
 
   dev.copy2eps(file=filename)
   cat("Output ->",filename,"\n")
+  par(former_par)
 }

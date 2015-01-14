@@ -15,7 +15,7 @@ WITH_Ca <- FALSE
 RAND_SEED <- 1
 DELTA_T <- 5
 Function_ratio <- 75
-Conductance_ratio <- 5
+Conductance_ratio <- 0
 Morphology_ratio <- 100 - (Function_ratio + Conductance_ratio*(WITH_K || WITH_Ca))
 extra_prefix <- paste("Rerative_liner_",Function_ratio,"_",Conductance_ratio,sep="")
 #extra_prefix <- paste("volume_",Function_ratio,"_",Conductance_ratio,sep="")
