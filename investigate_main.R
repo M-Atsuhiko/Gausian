@@ -1,4 +1,4 @@
-Type <- "Gausian"
+Type <- "Tsuishi"
 
 if(Type == "Gausian"){
   isGausian <- TRUE
@@ -27,7 +27,7 @@ DELTA_T <- seq(5,30,by=5)
 Function_ratio <- 75
 Conductance_ratio <- 0
 Morphology_ratio <- 100 - (Function_ratio + Conductance_ratio)
-extra_prefix <- paste("Rerative_",Function_ratio,"_",Conductance_ratio,sep="")
+extra_prefix <- paste("Tsuishi_alfa_05_",Function_ratio,"_",Conductance_ratio,sep="")
 
 if(WITH_K*WITH_Ca){
   name <- "k_ca"
@@ -455,7 +455,10 @@ legend <- cbind(c("Upper Dendrite","Lower Dendrite"),
                 c("red","blue"),
                 c(line_type,line_type))
 
-Ca_Ratios <- list(Upper_Ca_amounts/Upper_Ca_maxs,Lower_Ca_amounts/Lower_Ca_maxs)
+Upper_Ca_ratios <- Upper_Ca_amounts/Upper_Ca_maxs
+Lower_Ca_ratios <- Lower_Ca_amounts/Lower_Ca_maxs
+
+Ca_Ratios <- list(Upper_Ca_ratios,Lower_Ca_ratios)
 names(Ca_Ratios) <- c("Upper_Ca_ratios","Lower_Ca_ratios")
 showMax <- FALSE
 if(WITH_Ca){
@@ -565,7 +568,9 @@ color <- c("red","blue")
 legend <- cbind(c("Upper Dendrite","Lower Dendrite"),
                 c("red","blue"),
                 c(line_type,line_type))
-K_Ratios <- list(Upper_K_amounts/Upper_K_maxs,Lower_K_amounts/Lower_K_maxs)
+Upper_K_ratios <- Upper_K_amounts/Upper_K_maxs
+Lower_K_ratios <- Lower_K_amounts/Lower_K_maxs
+K_Ratios <- list(Upper_K_ratios,Lower_K_ratios)
 names(K_Ratios) <- c("Upper_K_ratios","Lower_K_ratios")
 showMax <- FALSE
 if(WITH_K){
@@ -674,11 +679,15 @@ All_Sum_Ca_amounts <- c()
 All_Sum_Ca_ratios <- c()
 All_Upper_Ca_amounts <- c()
 All_Lower_Ca_amounts <- c()
+All_Upper_Ca_ratios <- c()
+All_Lower_Ca_ratios <- c()
 
 All_Sum_K_amounts <- c()
 All_Sum_K_ratios <- c()
 All_Upper_K_amounts <- c()
 All_Lower_K_amounts <- c()
+All_Upper_K_ratios <- c()
+All_Lower_K_ratios <- c()
 
 
 All_Upper_Ca_maxs <- c()
@@ -735,11 +744,15 @@ for(dt in DELTA_T){
 
     All_Upper_Ca_amounts <- c(All_Upper_Ca_amounts,
                               Upper_Ca_amounts[paste(sd),paste(dt)])
+    All_Upper_Ca_ratios <- c(All_Upper_Ca_ratios,
+                              Upper_Ca_ratios[paste(sd),paste(dt)])
     All_Upper_Ca_maxs <- c(All_Upper_Ca_maxs,
                            Upper_Ca_maxs[paste(sd),paste(dt)])
 
     All_Lower_Ca_amounts <- c(All_Lower_Ca_amounts,
                               Lower_Ca_amounts[paste(sd),paste(dt)])
+    All_Lower_Ca_ratios <- c(All_Lower_Ca_ratios,
+                              Lower_Ca_ratios[paste(sd),paste(dt)])
     All_Lower_Ca_maxs <- c(All_Lower_Ca_maxs,
                            Lower_Ca_maxs[paste(sd),paste(dt)])
 
@@ -766,7 +779,9 @@ for(dt in DELTA_T){
 
 ALL_DATA_FRAME <- data.frame(DT=All_dt,
                              SEED=All_sd,
+                             
                              F=All_Fs,
+                             
                              TREE_length=All_TREE_lengths,
                              TREE_volume=All_TREE_volumes,
                              
@@ -783,10 +798,15 @@ ALL_DATA_FRAME <- data.frame(DT=All_dt,
                              TREE_Ca_amount=All_Sum_Ca_amounts,
                              TREE_Ca_max=All_Sum_Ca_maxs,
                              TREE_Ca_ratio=All_Sum_Ca_ratios,
+                             
                              Upper_Ca_amount=All_Upper_Ca_amounts,
                              Upper_Ca_max=All_Upper_Ca_maxs,
+                             Upper_Ca_ratio=All_Upper_Ca_ratios,
+                             
                              Lower_Ca_amount=All_Lower_Ca_amounts,
-                             Lower_Ca_max=All_Lower_Ca_maxs,                             
+                             Lower_Ca_max=All_Lower_Ca_maxs,
+                             Lower_Ca_ratio=All_Lower_Ca_ratios,
+                             
                              TREE_K_amount=All_Sum_K_amounts,
                              TREE_K_ratio=All_Sum_K_ratios,
                              TREE_K_max=All_Sum_K_maxs,

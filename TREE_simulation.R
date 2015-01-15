@@ -10,14 +10,14 @@ source(paste(Dir,"calc_number_synapse.R",sep=""))
 source(paste(Dir,"calc_contraction.R",sep=""))
 source(paste(Dir,"Stem_diam.R",sep=""))
 
-WITH_K <- TRUE
-WITH_Ca <- FALSE
-RAND_SEED <- 1
-DELTA_T <- 5
+WITH_K <- FALSE
+WITH_Ca <- TRUE
+RAND_SEED <- 9
+DELTA_T <- 20
 Function_ratio <- 75
-Conductance_ratio <- 0
+Conductance_ratio <- 5
 Morphology_ratio <- 100 - (Function_ratio + Conductance_ratio*(WITH_K || WITH_Ca))
-extra_prefix <- paste("Rerative_liner_",Function_ratio,"_",Conductance_ratio,sep="")
+extra_prefix <- paste("Rerative_Gaus",Function_ratio,"_",Conductance_ratio,sep="")
 #extra_prefix <- paste("volume_",Function_ratio,"_",Conductance_ratio,sep="")
 #extra_prefix <- paste("volume_",Function_ratio,"_",Conductance_ratio,sep="")
 #extra_prefix <- "times_Ldet"
