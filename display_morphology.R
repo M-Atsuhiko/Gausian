@@ -33,7 +33,7 @@ display_morphology<- function(TREE){
   rgl.spheres(c(0,0,0),radius = SOMA_DIAM/2,sides = 10,color="green")#,texture = SOMA_TEXTURE)
   
   #synaptic_zoneの描画
-#  display_synaptic_zone()
+  display_synaptic_zone()
 
   #Dendriteの描画
   for(i in 1:length(TREE)){

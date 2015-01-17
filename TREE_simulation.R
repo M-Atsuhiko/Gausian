@@ -3,6 +3,7 @@ source("display_conductance_on_morphology.R")
 source("TREE_simulation_function.R")
 source("./display_morphology.R")
 source("./display_synapse.R")
+source("./display_synaptic_zone.R")
 
 Dir <- "../R_functions/"
 source(paste(Dir,"calc_syn_length_diameter.R",sep=""))
@@ -11,13 +12,13 @@ source(paste(Dir,"calc_contraction.R",sep=""))
 source(paste(Dir,"Stem_diam.R",sep=""))
 
 WITH_K <- FALSE
-WITH_Ca <- TRUE
-RAND_SEED <- 9
-DELTA_T <- 20
+WITH_Ca <- FALSE
+RAND_SEED <- 2
+DELTA_T <- 15
 Function_ratio <- 75
-Conductance_ratio <- 5
+Conductance_ratio <- 0
 Morphology_ratio <- 100 - (Function_ratio + Conductance_ratio*(WITH_K || WITH_Ca))
-extra_prefix <- paste("Rerative_Gaus",Function_ratio,"_",Conductance_ratio,sep="")
+extra_prefix <- paste("Rerative_",Function_ratio,"_",Conductance_ratio,sep="")
 #extra_prefix <- paste("volume_",Function_ratio,"_",Conductance_ratio,sep="")
 #extra_prefix <- paste("volume_",Function_ratio,"_",Conductance_ratio,sep="")
 #extra_prefix <- "times_Ldet"
@@ -163,3 +164,4 @@ for(i in GENERATION){
 #  readline("next?")
 }
 
+rgl.postscript("~/workspace/Syuron/Images/TREE_sample.pdf",fmt="pdf")

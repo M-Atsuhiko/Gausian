@@ -20,14 +20,14 @@ par(lwd=3,
 output_dir <- paste("./",Type,"_Result/",sep="")
 
 WITH_K <- FALSE
-WITH_Ca <- FALSE
+WITH_Ca <- TRUE
 
 RAND_SEED <- 1:10
 DELTA_T <- seq(5,30,by=5)
 Function_ratio <- 75
-Conductance_ratio <- 0
+Conductance_ratio <- 5
 Morphology_ratio <- 100 - (Function_ratio + Conductance_ratio)
-extra_prefix <- paste("Tsuishi_alfa_05_",Function_ratio,"_",Conductance_ratio,sep="")
+extra_prefix <- paste("Rerative_liner_",Function_ratio,"_",Conductance_ratio,sep="")
 
 if(WITH_K*WITH_Ca){
   name <- "k_ca"
