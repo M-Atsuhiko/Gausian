@@ -50,7 +50,6 @@ evolution <- function(MULTI_GENERATION,Good_ID,Top_Estimate){
       # parent1とparen2の内、Dendriteの本数が少ない方の各Dendriteについて一回ずつ一点交叉を行う
       # 二つのparentの持つDendriteの本数が異なる場合
       # Dendriteの本数が多いparentの内、交叉に関与しなかった、余ったDendriteはそのまま子に引き継がれる
-
       
       # Upper paramを一点交叉させる
     parent_pair <- sample(parent_pair,2)#交叉する際の上下を決める
