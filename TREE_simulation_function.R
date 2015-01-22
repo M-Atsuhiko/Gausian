@@ -77,16 +77,15 @@ TREE_simulation_function <- function(TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params
         ps=20,
         cex=1,
         oma=c(0,1,0,0))
+    
     plot(rbind(c(xmin,ymin),c(xmax,ymax)),
          type="n",
          xlab="time [ms]",
          ylab="soma membrame potential [mV]")
 
     lines(lu_data,col="blue")
-#    lines(l_test_data,col="blue")
-
     lines(ul_data,col="red")
-#    lines(u_test_data,col="red")
+
     legend("bottomright",
            legend=c(expression(Blue %->% Red),expression(Red %->% Blue)),
            col=c("blue","red"),
@@ -94,9 +93,60 @@ TREE_simulation_function <- function(TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params
            cex=0.9,
            bty="n",
            y.intersp=1.5)
+    
+#=====================================================================
+    #修論, 図 input_order_detection.epsを作るための変更
+    ## lu_max_data <- lu_data[which(lu_data[,2] == max(lu_data[,2])),]
 
-    dev.copy2pdf(file="~/workspace/Syuron/Images/input_order_detectiono.pdf",
-                 out.type="pdf")
+    ## lines(rbind(c(lu_max_data[[1]],V_INIT),
+    ##             lu_max_data),
+    ##       lend="square",
+    ##       lty="dashed")
+    
+    ## points(lu_max_data,
+    ##        col="blue")
+
+    ## text(22.5,-63.8,
+    ##      labels=expression(R[B%->%R]))
+
+    ## ul_max_data <- ul_data[which(ul_data[,2] == max(ul_data[,2])),]
+
+    ## lines(rbind(c(ul_max_data[[1]],V_INIT),
+    ##             ul_max_data),
+    ##       lend="square",
+    ##       lty="dashed")
+
+    ## points(ul_max_data,
+    ##        col="red")
+
+    ## text(34,-65,
+    ##      labels=expression(R[R%->%B]))
+
+    
+
+    ## lines(rbind(c(0,V_INIT),
+    ##             c(50,V_INIT)),
+    ##       lty="dashed",
+    ##       lwd=1)
+    
+    ## lines(lu_data,col="blue")
+    
+#    lines(l_test_data,col="blue")
+
+    ## lines(ul_data,col="red")
+#    lines(u_test_data,col="red")
+    ## legend(32,-69,
+    ##        legend=c(expression(Blue %->% Red),expression(Red %->% Blue)),
+    ##        col=c("blue","red"),
+    ##        lwd=c(4,4),
+    ##        cex=0.9,
+    ##        bty="n",
+    ##        y.intersp=1.5)
+
+    ## dev.copy2eps(file="~/workspace/Syuron/Images/input_order_detection.eps")
+#=====================================================================
+    
+
 
     ## par(lwd=4,
     ##     ps=20,
