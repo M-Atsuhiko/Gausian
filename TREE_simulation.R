@@ -139,7 +139,6 @@ for(i in GENERATION){
     ##     return(Branch)}))})
     
     print(TREE_simulation_function(divided_TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)[1:2])
-    return()
   }else{
     cat("This neuron can't simulation.\n")
   }

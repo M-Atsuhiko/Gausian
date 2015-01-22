@@ -22,13 +22,12 @@ display_morphology<- function(TREE){
   # RGLの描画を行う際
   library("rgl")
   rgl.clear()
-  rgl.bg(color=c("gray","gray"))
-  
+  rgl.bg(color="white")  
   #3次元軸の生成
-  rgl.lines(c(-300,300),0,0,color="red")
-  rgl.lines(0,c(UPPER_SYNAPTIC_ZONE_Y,LOWER_SYNAPTIC_ZONE_Y),0,color="red")
-  rgl.lines(0,0,c(-300,300),color="red")
-  rgl.texts(c(300,0,0),c(0,UPPER_SYNAPTIC_ZONE_Y,0),c(0,0,300),text=c("x","y","z"),color="blue")
+  ## rgl.lines(c(-300,300),0,0,color="red")
+  ## rgl.lines(0,c(UPPER_SYNAPTIC_ZONE_Y,LOWER_SYNAPTIC_ZONE_Y),0,color="red")
+  ## rgl.lines(0,0,c(-300,300),color="red")
+  ## rgl.texts(c(300,0,0),c(0,UPPER_SYNAPTIC_ZONE_Y,0),c(0,0,300),text=c("x","y","z"),color="blue")
 
   #somaの描画
   rgl.spheres(c(0,0,0),radius = SOMA_DIAM/2,sides = 10,color="green")#,texture = SOMA_TEXTURE)
