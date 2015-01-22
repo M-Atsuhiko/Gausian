@@ -22,7 +22,8 @@ display_morphology<- function(TREE){
   # RGLの描画を行う際
   library("rgl")
   rgl.clear()
-
+  rgl.bg(color=c("gray","gray"))
+  
   #3次元軸の生成
   rgl.lines(c(-300,300),0,0,color="red")
   rgl.lines(0,c(UPPER_SYNAPTIC_ZONE_Y,LOWER_SYNAPTIC_ZONE_Y),0,color="red")
@@ -33,7 +34,7 @@ display_morphology<- function(TREE){
   rgl.spheres(c(0,0,0),radius = SOMA_DIAM/2,sides = 10,color="green")#,texture = SOMA_TEXTURE)
   
   #synaptic_zoneの描画
-  display_synaptic_zone()
+#  display_synaptic_zone()
 
   #Dendriteの描画
   for(i in 1:length(TREE)){

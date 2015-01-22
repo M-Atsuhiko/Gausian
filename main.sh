@@ -17,10 +17,12 @@ fi
 # 実行中
 # excuse time   | server| type     | seed   | dt     | suffix               |
 # ------------------------------------------------------------------------------
-# (1/17 15:10~)  | hal1  | k       | (1:10) | (5:30) | Rerative_liner_75_5  | F:75 C:5 名前のつけかた間違ってる
-# (1/17 15:10~)  | hal2  | k       | (1:10) | (5:30) | Rerative_Gaus_75_0   | F:75 C:0
-# (1/17 15:05~)  | hal3  | k       | (1:10) | (5 10) | Rerative_liner_100_0 | F:100 C:0 Fをかなり高くしないと論文通りの結果にならない
+# (1/21 13:15~)  | hal1  | k ca    | (1:10) | (5:30) | Rerative_Gaus_75_0   | F:75 C:0
+# (1/21 13:15~)  | hal2  | k       | (1:10) | (5:30) | Rerative_Gaus_75_5   | F:75 C:5
+# (1/22 11:50~)  | hal3  | k ca    | (1:10) | (5:30) | Rerative_liner_75_0  | F:75 C:0
 # (1/20 13:30~)  | hal4  | k ca    | (1:10) | (5:30) | Tsuishi_alfa_05      | alfa:0.5
+
+# k_Rerative_liner_75_5を回す
 
 # (12/17)  | iMac  | passive | ()           | F:75
 
@@ -29,7 +31,7 @@ DELTA_T=(5 10 15 20 25 30)
 CONTAIN_CONDUCTANCES="k ca"
 Function_Ratio="75"                   #ここでFunction_Ratioを変更できる
 Conductance_Ratio="0"
-Spesific="Tsuishi_alfa_05_"#${Function_Ratio}"_"${Conductance_Ratio}     #その他のprefix
+Spesific="Rerative_liner_"${Function_Ratio}"_"${Conductance_Ratio}     #その他のprefix
 
 for se in ${SEED[@]}
 do

@@ -75,18 +75,28 @@ TREE_simulation_function <- function(TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params
   if(filename != "Not_display"){
     par(lwd=4,
         ps=20,
-        cex=1)
+        cex=1,
+        oma=c(0,1,0,0))
     plot(rbind(c(xmin,ymin),c(xmax,ymax)),
          type="n",
          xlab="time [ms]",
          ylab="soma membrame potential [mV]")
 
+    lines(lu_data,col="blue")
+#    lines(l_test_data,col="blue")
 
-    lines(lu_data,col="red")
-    lines(l_test_data,col="blue")
+    lines(ul_data,col="red")
+#    lines(u_test_data,col="red")
+    legend("bottomright",
+           legend=c(expression(Blue %->% Red),expression(Red %->% Blue)),
+           col=c("blue","red"),
+           lwd=c(4,4),
+           cex=0.9,
+           bty="n",
+           y.intersp=1.5)
 
-    lines(ul_data,col="blue")
-    lines(u_test_data,col="red")
+    dev.copy2pdf(file="~/workspace/Syuron/Images/input_order_detectiono.pdf",
+                 out.type="pdf")
 
     ## par(lwd=4,
     ##     ps=20,

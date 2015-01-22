@@ -19,11 +19,11 @@ par(lwd=3,
 
 output_dir <- paste("./",Type,"_Result/",sep="")
 
-WITH_K <- FALSE
-WITH_Ca <- TRUE
+WITH_K <- TRUE
+WITH_Ca <- FALSE
 
-RAND_SEED <- 1:10
-DELTA_T <- seq(5,30,by=5)
+RAND_SEED <- 1:2
+DELTA_T <- seq(5,10,by=5)
 Function_ratio <- 75
 Conductance_ratio <- 5
 Morphology_ratio <- 100 - (Function_ratio + Conductance_ratio)
@@ -217,6 +217,7 @@ for(dt in DELTA_T){
 
   Upper_K_amount_max <- t(sapply(lapply(divided_named_TREEs,"[[","Upper_Dend"),function(TREE){
     Conductance_amount <- calc_Conductance_amount(TREE)
+    print(Conductance_amount)
     return(c(Conductance_amount[1],Conductance_amount[3]))
   }))
 
