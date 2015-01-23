@@ -17,8 +17,8 @@ divid_and_set_conductance <- function(TREE,Params){
     K_Gaus_peak <- dnorm(K_Gaus_mean,mean=K_Gaus_mean,sd=K_Gaus_sd)
     Ca_Gaus_peak <- dnorm(Ca_Gaus_mean,mean=Ca_Gaus_mean,sd=Ca_Gaus_sd)
 
-    
-    Dend_path <- Dendrite[[length(Dendrite)]][["path_leng"]]
+    Dend_path <- max(sapply(Dendrite,"[[","path_leng"))
+
     Nsegs <- sapply(Dendrite,"[[","nseg")
                                         #Branchを細分化したときの新しいNoの組をあらかじめ与えておく
     New_mx <- cbind(1:N_Branch,

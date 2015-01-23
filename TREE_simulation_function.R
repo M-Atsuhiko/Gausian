@@ -86,56 +86,77 @@ TREE_simulation_function <- function(TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params
     lines(lu_data,col="blue")
     lines(ul_data,col="red")
 
-    legend("bottomright",
-           legend=c(expression(Blue %->% Red),expression(Red %->% Blue)),
-           col=c("blue","red"),
-           lwd=c(4,4),
-           cex=0.9,
-           bty="n",
-           y.intersp=1.5)
+#    lines(l_test_data,col="blue")
+#    lines(u_test_data,col="red")
+
+    ## legend("bottomright",
+    ##        legend=c(expression(Blue %->% Red),expression(Red %->% Blue)),
+    ##        col=c("blue","red"),
+    ##        lwd=c(4,4),
+    ##        cex=0.9,
+    ##        bty="n",
+    ##        y.intersp=1.5)
     
 #=====================================================================
     #修論, 図 input_order_detection.epsを作るための変更
+    #input file: ./passive_Result/SEED2_dt15_passive_FR75_Rerative_75_0_Best_Datas.xdr
+    
     ## lu_max_data <- lu_data[which(lu_data[,2] == max(lu_data[,2])),]
+
+    ## lines(rbind(c(20,V_INIT),
+    ##             c(20,-64)),
+    ##       lty="dashed",
+    ##       lwd=1)
+
+    ## lines(rbind(c(5,V_INIT),
+    ##             c(5,-64)),
+    ##       lty="dashed",
+    ##       lwd=1)
+    
+    ## lines(rbind(c(0,V_INIT),
+    ##             c(50,V_INIT)),
+    ##       lty="dashed",
+    ##       lwd=1)
+
+    ## arrows(5,-64,20,-64,
+    ##        code=3,
+    ##        length=0.1,
+    ##        lwd=2)
+
+    ## text(12.5,-63.8,
+    ##      labels=expression(paste(Delta,"t",sep="")))
 
     ## lines(rbind(c(lu_max_data[[1]],V_INIT),
     ##             lu_max_data),
+    ##       col="blue",
     ##       lend="square",
+    ##       lwd=2,
     ##       lty="dashed")
     
-    ## points(lu_max_data,
+    ## points(rbind(lu_max_data,
+    ##              c(lu_max_data[[1]],V_INIT)),
     ##        col="blue")
 
-    ## text(22.5,-63.8,
+    ## text(26,-67,
     ##      labels=expression(R[B%->%R]))
 
     ## ul_max_data <- ul_data[which(ul_data[,2] == max(ul_data[,2])),]
 
     ## lines(rbind(c(ul_max_data[[1]],V_INIT),
     ##             ul_max_data),
+    ##       col="red",
     ##       lend="square",
+    ##       lwd=2,
     ##       lty="dashed")
 
-    ## points(ul_max_data,
+    ## points(rbind(ul_max_data,
+    ##              c(ul_max_data[[1]],V_INIT)),
     ##        col="red")
 
-    ## text(34,-65,
+    ## text(38,-68,
     ##      labels=expression(R[R%->%B]))
 
-    
-
-    ## lines(rbind(c(0,V_INIT),
-    ##             c(50,V_INIT)),
-    ##       lty="dashed",
-    ##       lwd=1)
-    
-    ## lines(lu_data,col="blue")
-    
-#    lines(l_test_data,col="blue")
-
-    ## lines(ul_data,col="red")
-#    lines(u_test_data,col="red")
-    ## legend(32,-69,
+    ## legend(32.5,-69,
     ##        legend=c(expression(Blue %->% Red),expression(Red %->% Blue)),
     ##        col=c("blue","red"),
     ##        lwd=c(4,4),

@@ -20,7 +20,7 @@ parallel_task <- function(Individual_Data){
   
   Individual_Data[["TREE"]] <- TREE
   simulation_or_not <- canSimulation(TREE)
-  
+
   if(simulation_or_not){
     divided_TREE <- divid_and_set_conductance(TREE,Params)
     
