@@ -20,14 +20,14 @@ par(lwd=3,
 output_dir <- paste("./",Type,"_Result/",sep="")
 
 WITH_K <- TRUE
-WITH_Ca <- TRUE
+WITH_Ca <- FALSE
 
 RAND_SEED <- 1:10
 DELTA_T <- seq(5,30,by=5)
 Function_ratio <- 75
 Conductance_ratio <- 0
 Morphology_ratio <- 100 - (Function_ratio + Conductance_ratio)
-extra_prefix <- paste("Tsuishi_alfa_05_",Function_ratio,"_",Conductance_ratio,sep="")
+extra_prefix <- paste("Rerative_liner_",Function_ratio,"_",Conductance_ratio,sep="")
 
 if(WITH_K*WITH_Ca){
   name <- "k_ca"
@@ -767,11 +767,15 @@ for(dt in DELTA_T){
     
     All_Upper_K_amounts <- c(All_Upper_K_amounts,
                              Upper_K_amounts[paste(sd),paste(dt)])
+    All_Upper_K_ratios <- c(All_Upper_K_ratios,
+                             Upper_K_ratios[paste(sd),paste(dt)])
     All_Upper_K_maxs <- c(All_Upper_K_maxs,
                           Upper_K_maxs[paste(sd),paste(dt)])
 
     All_Lower_K_amounts <- c(All_Lower_K_amounts,
                              Lower_K_amounts[paste(sd),paste(dt)])
+    All_Lower_K_ratios <- c(All_Lower_K_ratios,
+                             Lower_K_ratios[paste(sd),paste(dt)])
     All_Lower_K_maxs <- c(All_Lower_K_maxs,
                           Lower_K_maxs[paste(sd),paste(dt)])
   }
@@ -810,10 +814,14 @@ ALL_DATA_FRAME <- data.frame(DT=All_dt,
                              TREE_K_amount=All_Sum_K_amounts,
                              TREE_K_ratio=All_Sum_K_ratios,
                              TREE_K_max=All_Sum_K_maxs,
+                             
                              Upper_K_amount=All_Upper_K_amounts,
                              Upper_K_max=All_Upper_K_maxs,
+                             Upper_K_ratio=All_Upper_K_ratios,
+                             
                              Lower_K_amount=All_Lower_K_amounts,
-                             Lower_K_max=All_Lower_K_maxs
+                             Lower_K_max=All_Lower_K_maxs,
+                             Lower_K_ratio=All_Lower_K_ratios
                              )
 Filename <- paste(prefix,"All_Data_FRAME.xdr",sep="")
 save(ALL_DATA_FRAME,file=Filename)

@@ -126,32 +126,36 @@ TREE_simulation_function <- function(TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params
     ## text(12.5,-63.8,
     ##      labels=expression(paste(Delta,"t",sep="")))
 
-    ## lines(rbind(c(lu_max_data[[1]],V_INIT),
-    ##             lu_max_data),
-    ##       col="blue",
-    ##       lend="square",
-    ##       lwd=2,
+    ## arrows(lu_max_data[[1]],V_INIT,lu_max_data[[1]],lu_max_data[[2]],
+    ##        col="blue",
+    ##        lend="square",
+    ##        lwd=2,
+    ##        code=3,
+    ##        length=0.2,
     ##       lty="dashed")
     
     ## points(rbind(lu_max_data,
     ##              c(lu_max_data[[1]],V_INIT)),
-    ##        col="blue")
+    ##        col="blue",
+    ##        cex=0)
 
     ## text(26,-67,
     ##      labels=expression(R[B%->%R]))
 
     ## ul_max_data <- ul_data[which(ul_data[,2] == max(ul_data[,2])),]
 
-    ## lines(rbind(c(ul_max_data[[1]],V_INIT),
-    ##             ul_max_data),
-    ##       col="red",
-    ##       lend="square",
-    ##       lwd=2,
-    ##       lty="dashed")
+    ## arrows(ul_max_data[[1]],V_INIT,ul_max_data[[1]],ul_max_data[[2]],
+    ##        col="red",
+    ##        lend="square",
+    ##        lwd=2,
+    ##        code=3,
+    ##        length=0.2,
+    ##        lty="dashed")
 
     ## points(rbind(ul_max_data,
     ##              c(ul_max_data[[1]],V_INIT)),
-    ##        col="red")
+    ##        col="red",
+    ##        cex=0)
 
     ## text(38,-68,
     ##      labels=expression(R[R%->%B]))
