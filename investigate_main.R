@@ -1,4 +1,4 @@
-Type <- "Tsuishi"
+Type <- "Gausian"
 
 if(Type == "Gausian"){
   isGausian <- TRUE
@@ -19,15 +19,15 @@ par(lwd=3,
 
 output_dir <- paste("./",Type,"_Result/",sep="")
 
-WITH_K <- TRUE
-WITH_Ca <- FALSE
+WITH_K <- FALSE
+WITH_Ca <- TRUE
 
 RAND_SEED <- 1:10
 DELTA_T <- seq(5,30,by=5)
 Function_ratio <- 75
 Conductance_ratio <- 0
 Morphology_ratio <- 100 - (Function_ratio + Conductance_ratio)
-extra_prefix <- paste("Rerative_liner_",Function_ratio,"_",Conductance_ratio,sep="")
+extra_prefix <- paste("Rerative_Gaus_",Function_ratio,"_",Conductance_ratio,sep="")
 
 if(WITH_K*WITH_Ca){
   name <- "k_ca"
@@ -675,6 +675,9 @@ All_N_Lower_Syns <- c()
 All_Upper_Diams <- c()
 All_Lower_Diams <- c()
 
+All_Upper_Synapse_length_diam <- c()
+All_Lower_Synapse_length_diam <- c()
+
 All_Sum_Ca_amounts <- c()
 All_Sum_Ca_ratios <- c()
 All_Upper_Ca_amounts <- c()
@@ -688,7 +691,6 @@ All_Upper_K_amounts <- c()
 All_Lower_K_amounts <- c()
 All_Upper_K_ratios <- c()
 All_Lower_K_ratios <- c()
-
 
 All_Upper_Ca_maxs <- c()
 All_Lower_Ca_maxs <- c()
@@ -729,8 +731,14 @@ for(dt in DELTA_T){
 
     All_Upper_Diams <- c(All_Upper_Diams,
                          Upper_Diams[paste(sd),paste(dt)])
+    All_Upper_Synapse_length_diam <- c(All_Upper_Synapse_length_diam,
+                                       Upper_Synapse_length_diams[paste(sd),paste(dt)])
+    
     All_Lower_Diams <- c(All_Lower_Diams,
                          Lower_Diams[paste(sd),paste(dt)])
+    All_Lower_Synapse_length_diam <- c(All_Lower_Synapse_length_diam,
+                                       Lower_Synapse_length_diams[paste(sd),paste(dt)])
+
     
     All_Sum_Ca_amounts <- c(All_Sum_Ca_amounts,
                             TREE_Ca_amounts[paste(sd),paste(dt)])
@@ -798,6 +806,9 @@ ALL_DATA_FRAME <- data.frame(DT=All_dt,
                              N_Lower_Syn=All_N_Lower_Syns,
                              Upper_Diam=All_Upper_Diams,
                              Lower_Diam=All_Lower_Diams,
+
+                             Upper_Synaptic_length_diam=All_Upper_Synapse_length_diam,
+                             Lower_Synaptic_length_diam=All_Lower_Synapse_length_diam,
                              
                              TREE_Ca_amount=All_Sum_Ca_amounts,
                              TREE_Ca_max=All_Sum_Ca_maxs,
