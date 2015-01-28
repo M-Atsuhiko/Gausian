@@ -20,22 +20,21 @@ fi
 # 実行中
 # excuse time   | server| type     | seed   | dt     | suffix               |
 # ------------------------------------------------------------------------------
-# (1/21 13:15~)  | hal1  | k ca    | (1:10) | (5:30) | Rerative_Gaus_75_0   | F:75 C:0
-# (1/25 15:35~)  | hal2  | k       | (1:10) | (5:30) | Rerative_liner_75_5  | F:75 C:5
-# (1/22 11:50~)  | hal3  | k ca    | (1:10) | (5:30) | Rerative_liner_75_0  | F:75 C:0
-# (1/23 12:40~)  | hal4  | k ca    | (1:10) | (5:30) | Rerative_liner_75_5  | F:75 C:5
-
-#あと回すやつ
-# k_ca_Rerative_Gaus_75_5
+# (1/27 17:50~)  | hal1  | k ca    | (1:10) | (5:30) | Rerative_Gaus_75_5   | F:75 C:5
+# (1/28 11:55~)  | hal2  | k ca    | (5:1) | (5:30) | Rerative_Gaus_75_5   | F:75 C:5
+# (1/28 11:55~)  | hal3  | k ca    | (7:1) | (5:30) | Rerative_Gaus_75_5   | F:75 C:5
+# (1/28 11:55~)  | hal4  | k ca    | (10:1) | (5:30) | Rerative_Gaus_75_5   | F:75 C:5
 
 # (12/17)  | iMac  | passive | ()           | F:75
 
-SEED=(1 2 3 4 5 6 7 8 9 10)
+#ほかのパターンもなるべく多く回す
+
+SEED=(5 4 3 2 1)
 DELTA_T=(5 10 15 20 25 30)
-CONTAIN_CONDUCTANCES="k"
+CONTAIN_CONDUCTANCES="k ca"
 Function_Ratio="75"                   #ここでFunction_Ratioを変更できる
 Conductance_Ratio="5"
-Spesific="Rerative_liner_"${Function_Ratio}"_"${Conductance_Ratio}     #その他のprefix
+Spesific="Rerative_Gaus_"${Function_Ratio}"_"${Conductance_Ratio}     #その他のprefix
 
 for se in ${SEED[@]}
 do
