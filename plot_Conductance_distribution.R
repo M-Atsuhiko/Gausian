@@ -9,11 +9,13 @@ Conductance_lineplot <- function(mat,
 
     conductance_ratio <- conductance/Conductance_Max
 
+    
+
     lines(rbind(c(path_leng,index),
                 c((path_leng - length),index)),
           col=rgb(conductance_ratio,0,(1 - conductance_ratio)),
           lty="solid",
-          lend="square",
+          lend="butt",
           lwd=5)
     
     if(synapse == 1){
@@ -32,7 +34,8 @@ Conductance_stepplot <- function(mat,color,linetype){
     lines(rbind(c(col[1],Conductance_amount),
                 c(col[1] - col[2],Conductance_amount)),
           col=color,
-          lty=linetype)
+          lty=linetype
+          )
     return(c(col[1] - col[2]/2,Conductance_amount))
   })
 

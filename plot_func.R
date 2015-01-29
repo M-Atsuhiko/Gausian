@@ -5,6 +5,7 @@ plot_func <- function(Datas,
                       colname,
                       rowname,
                       legend,
+                      line_type,
                       showMax){
   plot.new()
   

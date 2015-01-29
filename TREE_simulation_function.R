@@ -103,20 +103,20 @@ TREE_simulation_function <- function(TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params
     
     ## lu_max_data <- lu_data[which(lu_data[,2] == max(lu_data[,2])),]
 
-    ## lines(rbind(c(20,V_INIT),
-    ##             c(20,-64)),
-    ##       lty="dashed",
-    ##       lwd=1)
+    lines(rbind(c(5 + DELTA_T,V_INIT),
+                c(5 + DELTA_T,-64)),
+          lty="dashed",
+          lwd=1)
 
-    ## lines(rbind(c(5,V_INIT),
-    ##             c(5,-64)),
-    ##       lty="dashed",
-    ##       lwd=1)
+    lines(rbind(c(5,V_INIT),
+                c(5,-64)),
+          lty="dashed",
+          lwd=1)
     
-    ## lines(rbind(c(0,V_INIT),
-    ##             c(50,V_INIT)),
-    ##       lty="dashed",
-    ##       lwd=1)
+    lines(rbind(c(0,V_INIT),
+                c(50,V_INIT)),
+          lty="dashed",
+          lwd=1)
 
     ## arrows(5,-64,20,-64,
     ##        code=3,

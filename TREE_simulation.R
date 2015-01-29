@@ -13,7 +13,7 @@ source(paste(Dir,"Stem_diam.R",sep=""))
 
 WITH_K <- FALSE
 WITH_Ca <- FALSE
-RAND_SEED <- 1
+RAND_SEED <- 2
 DELTA_T <- 15
 Function_ratio <- 75
 Conductance_ratio <- 0

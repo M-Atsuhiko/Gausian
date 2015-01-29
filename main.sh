@@ -20,10 +20,10 @@ fi
 # 実行中
 # excuse time   | server| type     | seed   | dt     | suffix               |
 # ------------------------------------------------------------------------------
-# (1/27 17:50~)  | hal1  | k ca    | (1:10) | (5:30) | Rerative_Gaus_75_5   | F:75 C:5
-# (1/28 11:55~)  | hal2  | k ca    | (5:1) | (5:30) | Rerative_Gaus_75_5   | F:75 C:5
+# (1/27 17:50~)  | hal1  | k ca    | (1:10) | (5:30) | Rerative_Gaus_75_5   | F:75 C:5 SEED 1~3終了
+# (1/28 11:55~)  | hal2  | k ca    | (5:1) | (5:30) | Rerative_Gaus_75_5   | F:75 C:5 SEED = 5終了
 # (1/28 11:55~)  | hal3  | k ca    | (7:1) | (5:30) | Rerative_Gaus_75_5   | F:75 C:5
-# (1/28 11:55~)  | hal4  | k ca    | (10:1) | (5:30) | Rerative_Gaus_75_5   | F:75 C:5
+# (1/28 11:55~)  | hal4  | k ca    | (10:1) | (5:30) | Rerative_Gaus_75_5   | F:75 C:5 SEED = 10,9終了
 
 # (12/17)  | iMac  | passive | ()           | F:75
 
