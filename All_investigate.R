@@ -14,9 +14,9 @@ par(lwd=3,
     cex=1.4,
     mex=1.2)
 
-Conductance_ratios <- c(0)
-WITH_Ks <- c(FALSE)
-WITH_Cas <- c(FALSE)
+Conductance_ratios <- c(5,0)
+WITH_Ks <- c(FALSE,TRUE)
+WITH_Cas <- c(FALSE,TRUE)
 
 
 Function_ratio <- 75
@@ -25,7 +25,6 @@ for(conductance_ratio in Conductance_ratios){
   Morphology_ratio <- 100 - (Function_ratio + conductance_ratio)
   for(WITH_K in WITH_Ks){
     for(WITH_Ca in WITH_Cas){
-
       
       if(Type == "Gausian"){
         Conductance_distribution <- "Gaus_"
@@ -35,7 +34,6 @@ for(conductance_ratio in Conductance_ratios){
       
       if(WITH_K*WITH_Ca){
         name <- "k_ca"
-        next
       }else if(WITH_K){
         name <- "k"
       }else if(WITH_Ca){

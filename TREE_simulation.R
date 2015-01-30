@@ -11,14 +11,14 @@ source(paste(Dir,"calc_number_synapse.R",sep=""))
 source(paste(Dir,"calc_contraction.R",sep=""))
 source(paste(Dir,"Stem_diam.R",sep=""))
 
-WITH_K <- FALSE
-WITH_Ca <- FALSE
-RAND_SEED <- 2
-DELTA_T <- 15
+WITH_K <- TRUE
+WITH_Ca <- TRUE
+RAND_SEED <- 1
+DELTA_T <- 20
 Function_ratio <- 75
-Conductance_ratio <- 0
+Conductance_ratio <- 5
 Morphology_ratio <- 100 - (Function_ratio + Conductance_ratio*(WITH_K || WITH_Ca))
-extra_prefix <- paste("Rerative_",Function_ratio,"_",Conductance_ratio,sep="")
+extra_prefix <- paste("Rerative_Gaus_",Function_ratio,"_",Conductance_ratio,sep="")
 #extra_prefix <- paste("volume_",Function_ratio,"_",Conductance_ratio,sep="")
 #extra_prefix <- paste("volume_",Function_ratio,"_",Conductance_ratio,sep="")
 #extra_prefix <- "times_Ldet"
@@ -36,7 +36,6 @@ if(WITH_Ca && !(WITH_K)){
 }else{
   SIM_TIME                     <- 50 #シミュレーションの長さ
 }
-
 
 cat("Delta_T:",DELTA_T,"\n")
 cat("SEED:",RAND_SEED,"\n")
@@ -87,39 +86,39 @@ for(i in GENERATION){
   cat("Parcent:",round(100*K_Ca_Conductace[1]/K_Ca_Conductace[3],digits=3),",",
       round(100*K_Ca_Conductace[2]/K_Ca_Conductace[4],digits=3),"(%)\n")
 
-  if(WITH_Ca){
-    Peak_Max <- -100
-    Conductance_curves <- c()
-    for(Param in Params){
-      Ca_peak <- Param[["Ca_peak"]]
-      Gaus_mean <- Param[["Ca_Gaus_mean"]]
-      Gaus_sd <- Param[["Ca_Gaus_sd"]]
+  ## if(WITH_Ca){
+  ##   Peak_Max <- -100
+  ##   Conductance_curves <- c()
+  ##   for(Param in Params){
+  ##     Ca_peak <- Param[["Ca_peak"]]
+  ##     Gaus_mean <- Param[["Ca_Gaus_mean"]]
+  ##     Gaus_sd <- Param[["Ca_Gaus_sd"]]
 
-      Gaus_peak <- dnorm(Gaus_mean,mean=Gaus_mean,sd=Gaus_sd)
-      Conductance_curves <- rbind(Conductance_curves,c(Ca_peak,Gaus_mean,Gaus_sd,Gaus_peak))
+  ##     Gaus_peak <- dnorm(Gaus_mean,mean=Gaus_mean,sd=Gaus_sd)
+  ##     Conductance_curves <- rbind(Conductance_curves,c(Ca_peak,Gaus_mean,Gaus_sd,Gaus_peak))
 
-      Peak_Max <- max(Peak_Max,Ca_peak)
-    }
+  ##     Peak_Max <- max(Peak_Max,Ca_peak)
+  ##   }
 
-    frame()
-    par(mfrow=c(1,2),
-        lwd=2)
-    for(plot_i in 1:nrow(Conductance_curves)){
-      if(plot_i == 1) color <- "red"
-      else if(plot_i == 2) color <- "blue"
-      row <- Conductance_curves[plot_i,]
-      curve((dnorm(x,mean=row[2],sd=row[3])/row[4])*row[1],0,1,
-            ylim=c(0,Peak_Max),
-            ylab="",
-            col=color)
-      par(new=TRUE)
-    }
-    mtext("conductance distribution [S/cm^2]",
-          side=2,
-          line=2.5)
+  ##   frame()
+  ##   par(mfrow=c(1,2),
+  ##       lwd=2)
+  ##   for(plot_i in 1:nrow(Conductance_curves)){
+  ##     if(plot_i == 1) color <- "red"
+  ##     else if(plot_i == 2) color <- "blue"
+  ##     row <- Conductance_curves[plot_i,]
+  ##     curve((dnorm(x,mean=row[2],sd=row[3])/row[4])*row[1],0,1,
+  ##           ylim=c(0,Peak_Max),
+  ##           ylab="",
+  ##           col=color)
+  ##     par(new=TRUE)
+  ##   }
+  ##   mtext("conductance distribution [S/cm^2]",
+  ##         side=2,
+  ##         line=2.5)
 
-    par(new=FALSE)
-  }
+  ##   par(new=FALSE)
+  ## }
 
   if(N_Upper_synapse > 0 && N_Lower_synapse > 0){
 
@@ -164,4 +163,6 @@ for(i in GENERATION){
 #  readline("next?")
 }
 
-#rgl.postscript("~/workspace/Syuron/Images/TREE_sample.pdf",fmt="pdf")
+#rgl.shapshot("~/workspace/Syuron/Images_Result/",name,"_gaus_TREE_sample_dt",DELTA_T,"_C",Conductance_ratio,".png")
+rgl.snapshot(file=paste("~/Desktop/",name,"_gaus_TREE_sample_dt",DELTA_T,"_C",Conductance_ratio,".png",sep=""))
+dev.copy2eps(file=paste("~/Desktop/",name,"_gaus_somaV_dt",DELTA_T,"_C",Conductance_ratio,".eps",sep=""))

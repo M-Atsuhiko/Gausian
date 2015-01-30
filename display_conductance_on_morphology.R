@@ -7,6 +7,7 @@ display_conductance_on_morphology <- function(TREE,conductance){
   # RGLの描画を行う際
   library("rgl")
   rgl.clear()
+  rgl.bg(color="white")
 
   ## #3次元軸の生成
   ##  rgl.lines(c(-300,300),0,0,color="red")
@@ -24,7 +25,8 @@ display_conductance_on_morphology <- function(TREE,conductance){
 
                                         #somaの描画
   ratio <- 0
-  rgl.spheres(c(0,0,0),radius = SOMA_DIAM/2,sides = 10,color=rgb(ratio,0,(1 - ratio)))#,texture = SOMA_TEXTURE)#
+#  rgl.spheres(c(0,0,0),radius = SOMA_DIAM/2,sides = 10,color=rgb(ratio,0,(1 - ratio)))#,texture = SOMA_TEXTURE)#
+  rgl.spheres(c(0,0,0),radius = SOMA_DIAM/2,sides = 10,color="green")#,texture = SOMA_TEXTURE)#
 
                                         #Dendriteの描画
   for(i in 1:length(TREE)){
@@ -36,7 +38,7 @@ display_conductance_on_morphology <- function(TREE,conductance){
     display_synapse(TREE[[i]])
   }
 
-  display_Legend(max_conductance,conductance)
+#  display_Legend(max_conductance,conductance)
 }
 
 display_dendrite_conductance <- function(Dendrite,Color,max_conductance,conductance){
@@ -50,7 +52,8 @@ display_dendrite_conductance <- function(Dendrite,Color,max_conductance,conducta
     #ratioにあわせて薄くする
     Dendrite_cyl <- cylinder3d(Branch_coordinate,closed = -2,radius = diam/2,sides = 100)
     #コンダクタンスが多いほど赤く、少ないほど青く表示する
-    shade3d(Dendrite_cyl,color = rgb(ratio,0,(1 - ratio)),override=TRUE)
+#    shade3d(Dendrite_cyl,color = rgb(ratio,0,(1 - ratio)),override=TRUE)
+    shade3d(Dendrite_cyl,color = "green",override=TRUE)
   }
 }
 
