@@ -3,6 +3,7 @@ investigate_main <- function(Type,Filename,WITH_K,WITH_Ca,Data_Dir,output_dir){
   if(Type == "Gausian"){
     isGausian <- TRUE
   }else{
+    Type <- "Liner"
     isGausian <- FALSE
   }
 
@@ -507,7 +508,7 @@ investigate_main <- function(Type,Filename,WITH_K,WITH_Ca,Data_Dir,output_dir){
 
 ##########################
   filename_prefix <- paste(prefix,"Ca_distribution_",sep="")
-  mainName <- "Ca distribution"
+  mainName <- "CaT distribution"
   colname <- expression(paste("[S/c",m^2,"]",sep=""))
   rowname <- expression(paste("Dendrite length [",mu,"m]",sep=""))
   mapply(function(Upper_Conductance,Lower_Conductance,delta_t){
@@ -622,7 +623,7 @@ investigate_main <- function(Type,Filename,WITH_K,WITH_Ca,Data_Dir,output_dir){
 
 ##########################
   filename_prefix <- paste(prefix,"K_distribution_",sep="")
-  mainName <- "K distribution"
+  mainName <- "Ka distribution"
   colname <- expression(paste("[S/c",m^2,"]",sep=""))
   rowname <- expression(paste("Dendrite length [",mu,"m]",sep=""))
   mapply(function(Upper_Conductance,Lower_Conductance,delta_t){
