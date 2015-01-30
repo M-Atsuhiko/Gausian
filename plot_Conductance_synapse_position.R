@@ -9,7 +9,7 @@ Conductance_lineplot <- function(mat,
 
     conductance_ratio <- conductance/Conductance_Max
 
-    if(path_leng > 0) synapse_color <- "orange"
+    if(path_leng > 0) synapse_color <- "violetred"
     else synapse_color <- "skyblue"
 
     lines(rbind(c(path_leng,index),

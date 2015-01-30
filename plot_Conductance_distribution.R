@@ -9,7 +9,8 @@ Conductance_lineplot <- function(mat,
 
     conductance_ratio <- conductance/Conductance_Max
 
-    
+    if(path_leng > 0) synapse_color <- "violetred"
+    else synapse_color <- "skyblue"
 
     lines(rbind(c(path_leng,index),
                 c((path_leng - length),index)),
@@ -22,7 +23,7 @@ Conductance_lineplot <- function(mat,
       points((path_leng - length/2),index - 0.3,
              pch=21,
              cex=0.5,
-             col="darkolivegreen")
+             col=synapse_color)
 
     }
   })
@@ -61,6 +62,8 @@ plot_Conductance_distribution <- function(Upper_Data,
                     oma=c(4,0,4,0),
                     xpd=NA)
 
+  soma_radius <- 12.5
+
   #一つ目の図
   N_Data <- length(Upper_Data)
   legend_names <- paste("Sample",1:N_Data,sep="")
@@ -90,16 +93,16 @@ plot_Conductance_distribution <- function(Upper_Data,
         lty="dashed",
         lwd=1)
 
-  polygon(c(UPPER_SYNAPTIC_ZONE_Y,UPPER_SYNAPTIC_ZONE_Y + SYNAPTIC_ZONE_DEPTH,
-            UPPER_SYNAPTIC_ZONE_Y + SYNAPTIC_ZONE_DEPTH,UPPER_SYNAPTIC_ZONE_Y),
+  polygon(c(UPPER_SYNAPTIC_ZONE_Y - soma_radius,UPPER_SYNAPTIC_ZONE_Y + SYNAPTIC_ZONE_DEPTH,
+            UPPER_SYNAPTIC_ZONE_Y + SYNAPTIC_ZONE_DEPTH,UPPER_SYNAPTIC_ZONE_Y - soma_radius),
           c(0,0,Conductance_Max,Conductance_Max),
           density=c(6,1),
           lwd=1,
           border="red",
           col="red")
 
-  polygon(c(LOWER_SYNAPTIC_ZONE_Y,LOWER_SYNAPTIC_ZONE_Y - SYNAPTIC_ZONE_DEPTH,
-            LOWER_SYNAPTIC_ZONE_Y - SYNAPTIC_ZONE_DEPTH,LOWER_SYNAPTIC_ZONE_Y),
+  polygon(c(LOWER_SYNAPTIC_ZONE_Y + soma_radius,LOWER_SYNAPTIC_ZONE_Y - SYNAPTIC_ZONE_DEPTH,
+            LOWER_SYNAPTIC_ZONE_Y - SYNAPTIC_ZONE_DEPTH,LOWER_SYNAPTIC_ZONE_Y + soma_radius),
           c(0,0,Conductance_Max,Conductance_Max),
           density=c(6,1),
           lwd=1,
@@ -148,16 +151,16 @@ plot_Conductance_distribution <- function(Upper_Data,
         lty="dashed",
         lwd=1)
 
-  polygon(c(UPPER_SYNAPTIC_ZONE_Y,UPPER_SYNAPTIC_ZONE_Y + SYNAPTIC_ZONE_DEPTH,
-            UPPER_SYNAPTIC_ZONE_Y + SYNAPTIC_ZONE_DEPTH,UPPER_SYNAPTIC_ZONE_Y),
+  polygon(c(UPPER_SYNAPTIC_ZONE_Y - soma_radius,UPPER_SYNAPTIC_ZONE_Y + SYNAPTIC_ZONE_DEPTH,
+            UPPER_SYNAPTIC_ZONE_Y + SYNAPTIC_ZONE_DEPTH,UPPER_SYNAPTIC_ZONE_Y - soma_radius),
           c(y_min,y_min,N_Data,N_Data),
           density=c(6,1),
           lwd=1,
           border="red",
           col="red")
 
-  polygon(c(LOWER_SYNAPTIC_ZONE_Y,LOWER_SYNAPTIC_ZONE_Y - SYNAPTIC_ZONE_DEPTH,
-            LOWER_SYNAPTIC_ZONE_Y - SYNAPTIC_ZONE_DEPTH,LOWER_SYNAPTIC_ZONE_Y),
+  polygon(c(LOWER_SYNAPTIC_ZONE_Y + soma_radius,LOWER_SYNAPTIC_ZONE_Y - SYNAPTIC_ZONE_DEPTH,
+            LOWER_SYNAPTIC_ZONE_Y - SYNAPTIC_ZONE_DEPTH,LOWER_SYNAPTIC_ZONE_Y + soma_radius),
           c(y_min,y_min,N_Data,N_Data),
           density=c(6,1),
           lwd=1,

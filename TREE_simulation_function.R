@@ -104,17 +104,17 @@ TREE_simulation_function <- function(TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params
     ## lu_max_data <- lu_data[which(lu_data[,2] == max(lu_data[,2])),]
 
     lines(rbind(c(5 + DELTA_T,V_INIT),
-                c(5 + DELTA_T,-64)),
+                c(5 + DELTA_T,ymax)),
           lty="dashed",
           lwd=1)
 
     lines(rbind(c(5,V_INIT),
-                c(5,-64)),
+                c(5,ymax)),
           lty="dashed",
           lwd=1)
     
     lines(rbind(c(0,V_INIT),
-                c(50,V_INIT)),
+                c(SIM_TIME,V_INIT)),
           lty="dashed",
           lwd=1)
 
