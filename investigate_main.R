@@ -1,4 +1,4 @@
-investigate_main <- function(Type,Filename,WITH_K,WITH_Ca,Data_Dir,output_dir){
+investigate_main <- functio(Type,Filename,WITH_K,WITH_Ca,Data_Dir,output_dir){
 
   if(Type == "Gausian"){
     isGausian <- TRUE
