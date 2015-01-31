@@ -1,5 +1,5 @@
 source("investigate_main.R")
-Type <- "Gausian"
+Type <- "Tsuishi"
 output_dir <- paste("./",Type,"_Result/",sep="")
 
 source(paste(Type,"_Dendritic_function_parameter.R",sep=""))

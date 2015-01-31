@@ -53,8 +53,36 @@ plot_Conductance_distribution <- function(Upper_Data,
                                           rowname,
                                           filename,
                                           isGausian,
+                                          Upper_mean,
+                                          Lower_mean,
                                           Conductance_Max){
 
+  #平均的なデータを作成する
+  #
+  # gausの平均が0の場合、分散はなんでもよくなる　<- すごく平均化しにくい
+  # 平均するよりは組み合わせを見た方がいい
+
+  ## if(isGausian){
+  ##   upper_peak <- Upper_mean[1]
+  ##   upper_mean <- Upper_mean[2]
+  ##   upper_sd <- Upper_mean[3]
+  ##   upper_length <- Upper_mean[4]
+  ##   Upper_Gaus_max <- dnorm(upper_mean,mean=upper_mean,sd=upper_sd)
+  ##   Upper_Data[[length(Upper_Data) + 1]] <- 
+  ##     list(0,sapply(1:ceiling(upper_length/5),function(i){
+  ##       return(c(i*5,5,upper_peak*dnorm(i*5/upper_length,mean=upper_mean,sd=upper_sd)/Upper_Gaus_max,0))
+  ##     }))
+  ##   lower_peak <- Lower_mean[1]
+  ##   lower_mean <- Lower_mean[2]
+  ##   lower_sd <- Lower_mean[3]
+  ##   lower_length <- Lower_mean[4]
+  ##   Lower_Gaus_max <- dnorm(lower_mean,mean=lower_mean,sd=lower_sd)
+  ##   Lower_Data[[length(Lower_Data) + 1]] <- 
+  ##     list(0,sapply(1:ceiling(lower_length/5),function(i){
+  ##       return(c(i*5,5,lower_peak*dnorm(i*5/lower_length,mean=lower_mean,sd=lower_sd)/Lower_Gaus_max,0))
+  ##     }))
+  ## }else{
+  ## }
   
   frame()
   former_par <- par(mfcol=c(2,1),
@@ -81,7 +109,7 @@ plot_Conductance_distribution <- function(Upper_Data,
   plot(rbind(c(Max_Upper_length,0),
              c(-Max_Lower_length,Conductance_Max)),
        type="n",
-       ylab=expression(paste("Conducrance amount [S/c",m^2,"]",,sep="")),
+       ylab=expression(paste("Conductance amount [S/c",m^2,"]",,sep="")),
        xlab="",
        xaxt="n")
 
@@ -110,8 +138,6 @@ plot_Conductance_distribution <- function(Upper_Data,
           col="blue")
 
   mapply(function(up_data,lw_data,color,linetype){
-    Ratio <- up_data[[1]]
-
     up_mtx <- up_data[[2]]
     lw_mtx <- lw_data[[2]]
 

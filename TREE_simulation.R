@@ -4,6 +4,9 @@ source("TREE_simulation_function.R")
 source("./display_morphology.R")
 source("./display_synapse.R")
 source("./display_synaptic_zone.R")
+source("TREE_2simulations_K.R")
+source("TREE_2simulations_Ca.R")
+source("other_dt_test.R")
 
 Dir <- "../R_functions/"
 source(paste(Dir,"calc_syn_length_diameter.R",sep=""))
@@ -11,14 +14,14 @@ source(paste(Dir,"calc_number_synapse.R",sep=""))
 source(paste(Dir,"calc_contraction.R",sep=""))
 source(paste(Dir,"Stem_diam.R",sep=""))
 
-WITH_K <- TRUE
-WITH_Ca <- TRUE
+WITH_K <- FALSE
+WITH_Ca <- FALSE
 RAND_SEED <- 1
-DELTA_T <- 20
+DELTA_T <- 15
 Function_ratio <- 75
-Conductance_ratio <- 5
+Conductance_ratio <- 0
 Morphology_ratio <- 100 - (Function_ratio + Conductance_ratio*(WITH_K || WITH_Ca))
-extra_prefix <- paste("Rerative_Gaus_",Function_ratio,"_",Conductance_ratio,sep="")
+extra_prefix <- paste("Rerative_",Function_ratio,"_",Conductance_ratio,sep="")
 #extra_prefix <- paste("volume_",Function_ratio,"_",Conductance_ratio,sep="")
 #extra_prefix <- paste("volume_",Function_ratio,"_",Conductance_ratio,sep="")
 #extra_prefix <- "times_Ldet"
@@ -121,23 +124,14 @@ for(i in GENERATION){
   ## }
 
   if(N_Upper_synapse > 0 && N_Lower_synapse > 0){
-
-    ## if(WITH_Ca && !WITH_K){
-    ##                                     #postscript("WITH_ca_NO_ca_result.eps",horizontal=FALSE)
-    ##   par(mfcol=c(1,2))
-    ##   print(TREE_simulation_function(TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)[1:2])
-    ##   WITH_Ca <- FALSE
-    ##   print(TREE_simulation_function(TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)[1:2])
-    ##   WITH_Ca <- TRUE
-    ##                                     #dev.off()
-    ## }else{
-
-    ## divided_TREE <- lapply(divided_TREE,function(Dendrite){
-    ##   return(lapply(Dendrite,function(Branch){
-    ##     Branch[["Ca_conductance"]] <- 0
-    ##     return(Branch)}))})
-    
-    print(TREE_simulation_function(divided_TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)[1:2])
+#     TREE_simulation_function(divided_TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)[1:2])
+    ## if(WITH_K)
+    ##   TREE_2simulations_K(divided_TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)
+    ## else if(WITH_Ca)
+    ##   TREE_2simulations_Ca(divided_TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)
+    ## else{
+    other_dt_test(divided_TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)
+#    }
   }else{
     cat("This neuron can't simulation.\n")
   }
@@ -162,7 +156,6 @@ for(i in GENERATION){
 #  cat("webGL output:",webGL_output,"\n")
 #  readline("next?")
 }
-
 #rgl.shapshot("~/workspace/Syuron/Images_Result/",name,"_gaus_TREE_sample_dt",DELTA_T,"_C",Conductance_ratio,".png")
-rgl.snapshot(file=paste("~/Desktop/",name,"_gaus_TREE_sample_dt",DELTA_T,"_C",Conductance_ratio,".png",sep=""))
-dev.copy2eps(file=paste("~/Desktop/",name,"_gaus_somaV_dt",DELTA_T,"_C",Conductance_ratio,".eps",sep=""))
+#rgl.snapshot(file=paste("~/Desktop/",name,"_gaus_TREE_sample_dt",DELTA_T,"_C",Conductance_ratio,".png",sep=""))
+#dev.copy2eps(file=paste("~/Desktop/",name,"_gaus_somaV_dt",DELTA_T,"_C",Conductance_ratio,".eps",sep=""))

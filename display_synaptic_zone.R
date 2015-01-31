@@ -9,5 +9,3 @@ display_synaptic_zone <- function(){
   shade3d( translate3d( scale3d(cube3d(col=LOWER_SYNAPTIC_ZONE_COLOR,alpha = ALP),SYNAPTIC_SHOW_SQUARE,SYNAPTIC_ZONE_DEPTH/2,SYNAPTIC_SHOW_SQUARE), 0, LOWER_SYNAPTIC_ZONE_Y - SYNAPTIC_ZONE_DEPTH/2, 0) )
 
 }
-
-display_synaptic_zone()

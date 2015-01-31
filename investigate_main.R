@@ -46,6 +46,13 @@ investigate_main <- function(Type,Filename,WITH_K,WITH_Ca,Data_Dir,output_dir){
   Upper_K_distribution <- as.list(NULL)
   Lower_K_distribution <- as.list(NULL)
 
+  #コンダクタンス分布の平均をみる
+  Upper_Ca_dist_mean <- as.list(NULL) #(Ca_peak,Ca_Gaus_mean,Ca_Gaus_sd,path_leng)または(Ca_stem_conductance,ca_taper,branch_length,path_leng)をもつ
+  Lower_Ca_dist_mean <- as.list(NULL)
+  
+  Upper_K_dist_mean <- as.list(NULL) #行ごとに (K_peak,K_Gaus_mean,K_Gaus_sd,path_leng)または(K_stem_conductance,ca_taper,branch_length,path_leng)をもつ
+  Lower_K_dist_mean <- as.list(NULL)
+
   for(dt in DELTA_T){
     cat("Delta_T:",dt,"\n")
     Datas <- as.list(NULL)
@@ -183,6 +190,41 @@ investigate_main <- function(Type,Filename,WITH_K,WITH_Ca,Data_Dir,output_dir){
 
     Lower_Ca_distribution[[length(Lower_Ca_distribution) + 1]] <- Lower_Distribution
 
+    Upper_Ca_Datas <- sapply(Datas,function(Data){
+      Upper_i <- return_Upper_Lower_Other_i(Data[["TREE"]])[["Upper_Dend"]]
+      Upper_Param <- Data[["Params"]][[Upper_i]]
+      Upper_Dend <- Data[["TREE"]][[Upper_i]]
+      if(isGausian){
+        return(c(Upper_Param[["Ca_peak"]],
+                 Upper_Param[["Ca_Gaus_mean"]],
+                 Upper_Param[["Ca_Gaus_sd"]],
+                 max(sapply(Upper_Dend,"[[","path_leng"))))}
+      else{
+        return(c(Upper_Param[["Ca_Stem_conductance"]],
+                 Upper_Param[["Ca_taper"]],
+                 Upper_Param[["Length_MIEW"]],
+                 max(sapply(Upper_Dend,"[[","path_leng"))))
+      }
+    })
+    Upper_Ca_dist_mean[[length(Upper_Ca_dist_mean) + 1]] <- apply(Upper_Ca_Datas,1,mean)
+
+    Lower_Ca_Datas <- sapply(Datas,function(Data){
+      Lower_i <- return_Upper_Lower_Other_i(Data[["TREE"]])[["Lower_Dend"]]
+      Lower_Param <- Data[["Params"]][[Lower_i]]
+      Lower_Dend <- Data[["TREE"]][[Lower_i]]
+      if(isGausian){
+        return(c(Lower_Param[["Ca_peak"]],
+                 Lower_Param[["Ca_Gaus_mean"]],
+                 Lower_Param[["Ca_Gaus_sd"]],
+                 max(sapply(Lower_Dend,"[[","path_leng"))))}
+      else{
+        return(c(Lower_Param[["Ca_Stem_conductance"]],
+                 Lower_Param[["Ca_taper"]],
+                 max(sapply(Lower_Dend,"[[","path_leng"))))
+      }
+    })
+    Lower_Ca_dist_mean[[length(Lower_Ca_dist_mean) + 1]] <- apply(Lower_Ca_Datas,1,mean)
+
     Upper_K_amount_max <- t(sapply(lapply(divided_named_TREEs,"[[","Upper_Dend"),function(TREE){
       Conductance_amount <- calc_Conductance_amount(TREE)
       return(c(Conductance_amount[1],Conductance_amount[3]))
@@ -235,6 +277,40 @@ investigate_main <- function(Type,Filename,WITH_K,WITH_Ca,Data_Dir,output_dir){
     })
 
     Lower_K_distribution[[length(Lower_K_distribution) + 1]] <- Lower_Distribution
+
+    Upper_K_Datas <- sapply(Datas,function(Data){
+      Upper_i <- return_Upper_Lower_Other_i(Data[["TREE"]])[["Upper_Dend"]]
+      Upper_Param <- Data[["Params"]][[Upper_i]]
+      Upper_Dend <- Data[["TREE"]][[Upper_i]]
+      if(isGausian){
+        return(c(Upper_Param[["K_peak"]],
+                 Upper_Param[["K_Gaus_mean"]],
+                 Upper_Param[["K_Gaus_sd"]],
+                 max(sapply(Upper_Dend,"[[","path_leng"))))}
+      else{
+        return(c(Upper_Param[["K_Stem_conductance"]],
+                 Upper_Param[["K_taper"]],
+                 max(sapply(Upper_Dend,"[[","path_leng"))))
+      }
+    })
+    Upper_K_dist_mean[[length(Upper_K_dist_mean) + 1]] <- apply(Upper_K_Datas,1,mean)
+
+    Lower_K_Datas <- sapply(Datas,function(Data){
+      Lower_i <- return_Upper_Lower_Other_i(Data[["TREE"]])[["Lower_Dend"]]
+      Lower_Param <- Data[["Params"]][[Lower_i]]
+      Lower_Dend <- Data[["TREE"]][[Lower_i]]
+      if(isGausian){
+        return(c(Lower_Param[["K_peak"]],
+                 Lower_Param[["K_Gaus_mean"]],
+                 Lower_Param[["K_Gaus_sd"]],
+                 max(sapply(Lower_Dend,"[[","path_leng"))))}
+      else{
+        return(c(Lower_Param[["K_Stem_conductance"]],
+                 Lower_Param[["K_taper"]],
+                 max(sapply(Lower_Dend,"[[","path_leng"))))
+      }
+    })
+    Lower_K_dist_mean[[length(Lower_K_dist_mean) + 1]] <- apply(Lower_K_Datas,1,mean)
   }
 
   prefix <- paste(output_dir,name,"_",extra_prefix,"_",sep="")
@@ -511,8 +587,8 @@ investigate_main <- function(Type,Filename,WITH_K,WITH_Ca,Data_Dir,output_dir){
   mainName <- "CaT distribution"
   colname <- expression(paste("[S/c",m^2,"]",sep=""))
   rowname <- expression(paste("Dendrite length [",mu,"m]",sep=""))
-  mapply(function(Upper_Conductance,Lower_Conductance,delta_t){
-    main <- paste(delta_t,"ms ",mainName,sep="")
+  mapply(function(Upper_Conductance,Lower_Conductance,Upper_Ca_mean,Lower_Ca_mean,delta_t){
+    main <- paste(Type," ",delta_t,"ms ",mainName,sep="")
     Filename <- paste(filename_prefix,"dt",delta_t,".eps",sep="")
     if(WITH_Ca){
       plot_Conductance_distribution(Upper_Conductance,
@@ -522,9 +598,11 @@ investigate_main <- function(Type,Filename,WITH_K,WITH_Ca,Data_Dir,output_dir){
                                     rowname,
                                     Filename,
                                     isGausian,
+                                    Upper_Ca_mean,
+                                    Lower_Ca_mean,
                                     Ca_MAX)
     }},
-         Upper_Ca_distribution,Lower_Ca_distribution,DELTA_T)
+         Upper_Ca_distribution,Lower_Ca_distribution,Upper_Ca_dist_mean,Lower_Ca_dist_mean,DELTA_T)
 
 ##########################
 
@@ -626,7 +704,7 @@ investigate_main <- function(Type,Filename,WITH_K,WITH_Ca,Data_Dir,output_dir){
   mainName <- "Ka distribution"
   colname <- expression(paste("[S/c",m^2,"]",sep=""))
   rowname <- expression(paste("Dendrite length [",mu,"m]",sep=""))
-  mapply(function(Upper_Conductance,Lower_Conductance,delta_t){
+  mapply(function(Upper_Conductance,Lower_Conductance,Upper_K_mean,Lower_K_mean,delta_t){
     main <- paste(Type," ",delta_t,"ms ",mainName,sep="")
     Filename <- paste(filename_prefix,"dt",delta_t,".eps",sep="")
     if(WITH_K){
@@ -637,9 +715,11 @@ investigate_main <- function(Type,Filename,WITH_K,WITH_Ca,Data_Dir,output_dir){
                                     rowname,
                                     Filename,
                                     isGausian,
+                                    Upper_K_mean,
+                                    Lower_K_mean,
                                     K_MAX)
     }},
-         Upper_K_distribution,Lower_K_distribution,DELTA_T)
+         Upper_K_distribution,Lower_K_distribution,Upper_K_dist_mean,Lower_K_dist_mean,DELTA_T)
 
 
 ############################
