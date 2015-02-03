@@ -1,5 +1,5 @@
 source("investigate_main.R")
-Type <- "Tsuishi"
+Type <- "Gausian"
 output_dir <- paste("./",Type,"_Result/",sep="")
 
 source(paste(Type,"_Dendritic_function_parameter.R",sep=""))
@@ -14,7 +14,7 @@ par(lwd=3,
     cex=1.4,
     mex=1.2)
 
-Conductance_ratios <- c(5,0)
+Conductance_ratios <- c(0,5)
 WITH_Ks <- c(FALSE,TRUE)
 WITH_Cas <- c(FALSE,TRUE)
 
@@ -39,9 +39,12 @@ for(conductance_ratio in Conductance_ratios){
       }else if(WITH_Ca){
         name <- "ca"
       }else{
-        name <- "passive"
-        if(Type == "Tsuishi" || conductance_ratio == 5) next
+        if(conductance_ratio == 5) next
+        else if(Type == "Tsuishi"){
+          
+        }
         else Conductance_distribution <- ""
+        name <- "passive"
       }
 
       extra_prefix <- paste("Rerative_",Conductance_distribution,Function_ratio,"_",conductance_ratio,sep="")
@@ -51,7 +54,7 @@ for(conductance_ratio in Conductance_ratios){
       Data_Dir <- paste("./",name,"_Result/",sep="")
     
       Filename <- paste(paste(name,collapse="_"),"_",paste("FR",Function_ratio,sep=""),"_",extra_prefix,"_Best_Datas.xdr",sep="")
-      investigate_main(Type,Filename,WITH_K,WITH_Ca,Data_Dir,output_dir)
+      investigate_main(Type,Filename,WITH_K,WITH_Ca,Data_Dir,name,output_dir)
     }
   }
 }

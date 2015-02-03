@@ -322,11 +322,14 @@ G_SYN                          <- 0.5*10^(-3)
 FIRST_ACTIVATE_TIME            <- 5 #最初にシナプス活性化をさせる時間
 NOT_ACTIVATE_TIME              <- -100 #シナプスを活性化させない場合の時間
 
-if(WITH_Ca && !(WITH_K)){
-  SIM_TIME                     <- 100 #シミュレーションの長さ
-}else{
-  SIM_TIME                     <- 50 #シミュレーションの長さ
-}
+## if(WITH_Ca && !(WITH_K)){
+##   SIM_TIME                     <- 100 #シミュレーションの長さ
+## }else{
+##   SIM_TIME                     <- 50 #シミュレーションの長さ
+## }
+
+SIM_TIME <- 50     # Caコンダクタンスの分布にはシミュレーション時間の長さも関係している可能性が高い(2/3)
+
 
 #今はSIMUL_PARAMETER_FILEの変数に関わらず、sim_templateファイルに埋め込みの値を使っているので注意
 SIMUL_PARAMETER_FILE           <- "./sim_parameter.hoc" # シミュレーションで用いるパラメータ、(cai、cao、celsiusなど)をまとめたファイル

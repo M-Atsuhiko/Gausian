@@ -15,13 +15,13 @@ source(paste(Dir,"calc_contraction.R",sep=""))
 source(paste(Dir,"Stem_diam.R",sep=""))
 
 WITH_K <- FALSE
-WITH_Ca <- FALSE
+WITH_Ca <- TRUE
 RAND_SEED <- 1
-DELTA_T <- 15
+DELTA_T <- 5
 Function_ratio <- 75
 Conductance_ratio <- 0
 Morphology_ratio <- 100 - (Function_ratio + Conductance_ratio*(WITH_K || WITH_Ca))
-extra_prefix <- paste("Rerative_",Function_ratio,"_",Conductance_ratio,sep="")
+extra_prefix <- paste("Rerative_Gaus_st50_",Function_ratio,"_",Conductance_ratio,sep="")
 #extra_prefix <- paste("volume_",Function_ratio,"_",Conductance_ratio,sep="")
 #extra_prefix <- paste("volume_",Function_ratio,"_",Conductance_ratio,sep="")
 #extra_prefix <- "times_Ldet"
@@ -34,11 +34,13 @@ if(WITH_K*WITH_Ca){
   name <- "ca"
 }else name <- "passive"
 
-if(WITH_Ca && !(WITH_K)){
-  SIM_TIME                     <- 100 #シミュレーションの長さ
-}else{
-  SIM_TIME                     <- 50 #シミュレーションの長さ
-}
+## if(WITH_Ca && !(WITH_K)){
+##   SIM_TIME                     <- 100 #シミュレーションの長さ
+## }else{
+##   SIM_TIME                     <- 50 #シミュレーションの長さ
+## }
+
+SIM_TIME <- 50
 
 cat("Delta_T:",DELTA_T,"\n")
 cat("SEED:",RAND_SEED,"\n")
@@ -124,13 +126,13 @@ for(i in GENERATION){
   ## }
 
   if(N_Upper_synapse > 0 && N_Lower_synapse > 0){
-#     TREE_simulation_function(divided_TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)[1:2])
-    ## if(WITH_K)
-    ##   TREE_2simulations_K(divided_TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)
-    ## else if(WITH_Ca)
-    ##   TREE_2simulations_Ca(divided_TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)
+    print(TREE_simulation_function(divided_TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)[1:2])
+#    if(WITH_K)
+#      TREE_2simulations_K(divided_TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)
+#    if(WITH_Ca)
+#      TREE_2simulations_Ca(divided_TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)
     ## else{
-    other_dt_test(divided_TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)
+#    other_dt_test(divided_TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)
 #    }
   }else{
     cat("This neuron can't simulation.\n")

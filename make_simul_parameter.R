@@ -2,16 +2,16 @@ make_simul_parameter <- function(filename,celsius,cai,cao,ek){
   output <- file(filename,"w")
 
   #この部分はsim_template2がうまく行かなかったら変える
-  writeLines("forall{",output,sep="\n")
-  insert_conductance(PAS,output)
-  insert_conductance(Ka,output)
-  insert_conductance(CaT,output)
-  set_property("Ra",Ra,output)
-  set_property("cm",cm,output)
-  set_property(G_PAS,g_pas,output)
-  set_property(E_PAS,e_pas,output)
-  writeLines("}",output,sep="\n")
-  fresh_line(output)
+  ## writeLines("forall{",output,sep="\n")
+  ## insert_conductance(PAS,output)
+  ## insert_conductance(Ka,output)
+  ## insert_conductance(CaT,output)
+  ## set_property("Ra",Ra,output)
+  ## set_property("cm",cm,output)
+  ## set_property(G_PAS,g_pas,output)
+  ## set_property(E_PAS,e_pas,output)
+  ## writeLines("}",output,sep="\n")
+  ## fresh_line(output)
   #ここまで
 
   equal("celsius",celsius,output)
