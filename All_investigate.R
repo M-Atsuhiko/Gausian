@@ -1,5 +1,5 @@
 source("investigate_main.R")
-Type <- "Tsuishi"
+Type <- "Gausian"
 output_dir <- paste("./",Type,"_Result/",sep="")
 
 source(paste(Type,"_Dendritic_function_parameter.R",sep=""))
@@ -27,7 +27,7 @@ for(conductance_ratio in Conductance_ratios){
     for(WITH_Ca in WITH_Cas){
       
       if(Type == "Gausian"){
-        Conductance_distribution <- "Gaus_"
+        Conductance_distribution <- "Gaus_st50_"
       }else if(Type == "Tsuishi"){
         Conductance_distribution <- "liner_st50_"
       }
