@@ -253,3 +253,8 @@
 # (1/30 16:50~) | hal1  | k        | (1:10) | (5:30) | Rerative_Gaus_k040_75_0    | F:75 C:0 MAX_Kの値を増やした
 # (1/30 16:50~) | hal2  | k        | (1:10) | (5:30) | Rerative_liner_k040_75_5   | F:75 C:5 MAX_Kの値を増やした 
 終了
+
+2/5
+# (2/3 11:00~) | hal3  | ca       | (1:10) | (5:30) | Rerative_liner_st50_75_0   | F:75 C:0 tstopを50msに
+# (2/3 11:00~) | hal4  | ca       | (1:10) | (5:30) | Rerative_liner_st50_75_5  | F:75 C:5 tstopを50msに
+終了

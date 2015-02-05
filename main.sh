@@ -22,17 +22,17 @@ fi
 # ------------------------------------------------------------------------------
 # (2/3 11:00~) | hal1  | ca       | (1:10) | (5:30) | Rerative_Gaus_st50_75_0   | F:75 C:0 tstopを50msに
 # (2/3 11:00~) | hal2  | ca       | (1:10) | (5:30) | Rerative_Gaus_st50_75_5  | F:75 C:5 tstopを50msに
-# (2/3 11:00~) | hal3  | ca       | (1:10) | (5:30) | Rerative_liner_st50_75_0   | F:75 C:0 tstopを50msに
-# (2/3 11:00~) | hal4  | ca       | (1:10) | (5:30) | Rerative_liner_st50_75_5  | F:75 C:5 tstopを50msに
+# (2/3 11:00~) | hal3  | ca       | (10) | (5:30) | Rerative_Gaus_st50_75_0  | F:75 C:0 tstopを50msに
+# (2/3 11:00~) | hal4  | ca       | (10) | (5:30) | Rerative_Gaus_st50_75_5  | F:75 C:5 tstopを50msに
 
 #ほかのパターンもなるべく多く回す
 
-SEED=(1 2 3 4 5 6 7 8 9 10)
-DELTA_T=(5 10 15 20 25 30)
+SEED=(10)
+DELTA_T=(30 25 20 15 10 5)
 CONTAIN_CONDUCTANCES="ca"
 Function_Ratio="75"                   #ここでFunction_Ratioを変更できる
 Conductance_Ratio="5"
-Spesific="Rerative_liner_st50_"${Function_Ratio}"_"${Conductance_Ratio}     #その他のprefix
+Spesific="Rerative_Gaus_st50_"${Function_Ratio}"_"${Conductance_Ratio}     #その他のprefix
 
 for se in ${SEED[@]}
 do
