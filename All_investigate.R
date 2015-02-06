@@ -1,6 +1,8 @@
 source("investigate_main.R")
 Type <- "Gausian"
-output_dir <- paste("./",Type,"_Result/",sep="")
+#output_dir <- paste("./",Type,"_Result/",sep="")
+output_dir <- "~/Desktop/"
+
 
 source(paste(Type,"_Dendritic_function_parameter.R",sep=""))
 source("plot_func.R")
@@ -14,7 +16,7 @@ par(lwd=3,
     cex=1.4,
     mex=1.2)
 
-Conductance_ratios <- c(0,5)
+Conductance_ratios <- c(0)
 WITH_Ks <- c(FALSE)
 WITH_Cas <- c(TRUE)
 
@@ -27,9 +29,9 @@ for(conductance_ratio in Conductance_ratios){
     for(WITH_Ca in WITH_Cas){
       
       if(Type == "Gausian"){
-        Conductance_distribution <- "Gaus_st50_"
+        Conductance_distribution <- "Gaus_"
       }else if(Type == "Tsuishi"){
-        Conductance_distribution <- "liner_st50_"
+        Conductance_distribution <- "liner_"
       }
       
       if(WITH_K*WITH_Ca){

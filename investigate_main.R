@@ -403,11 +403,7 @@ investigate_main <- function(Type,Filename,WITH_K,WITH_Ca,Data_Dir,name,output_d
     })
 
     Lower_K_distribution[[length(Lower_K_distribution) + 1]] <- Lower_Distribution
-
   }
-
-
-  
 
   Label_SEED <- paste(RAND_SEED)
   Label_Delta_T <- paste(DELTA_T)
