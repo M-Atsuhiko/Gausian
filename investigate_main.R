@@ -3,7 +3,8 @@ investigate_main <- function(Type,Filename,WITH_K,WITH_Ca,Data_Dir,name,output_d
   if(Type == "Gausian"){
     isGausian <- TRUE
   }else{
-    Type <- "Liner"
+#    Type <- "Liner"
+    Type <- "Exp"
     isGausian <- FALSE
   }
 

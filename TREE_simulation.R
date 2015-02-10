@@ -14,14 +14,14 @@ source(paste(Dir,"calc_number_synapse.R",sep=""))
 source(paste(Dir,"calc_contraction.R",sep=""))
 source(paste(Dir,"Stem_diam.R",sep=""))
 
-WITH_K <- FALSE
-WITH_Ca <- TRUE
-RAND_SEED <- 1
-DELTA_T <- 5
+WITH_K <- TRUE
+WITH_Ca <- FALSE
+RAND_SEED <- 3
+DELTA_T <- 10
 Function_ratio <- 75
-Conductance_ratio <- 0
+Conductance_ratio <- 5
 Morphology_ratio <- 100 - (Function_ratio + Conductance_ratio*(WITH_K || WITH_Ca))
-extra_prefix <- paste("Rerative_Gaus_st50_",Function_ratio,"_",Conductance_ratio,sep="")
+extra_prefix <- paste("Rerative_Gaus_",Function_ratio,"_",Conductance_ratio,sep="")
 #extra_prefix <- paste("volume_",Function_ratio,"_",Conductance_ratio,sep="")
 #extra_prefix <- paste("volume_",Function_ratio,"_",Conductance_ratio,sep="")
 #extra_prefix <- "times_Ldet"
@@ -126,9 +126,9 @@ for(i in GENERATION){
   ## }
 
   if(N_Upper_synapse > 0 && N_Lower_synapse > 0){
-    print(TREE_simulation_function(divided_TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)[1:2])
+#    print(TREE_simulation_function(divided_TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)[1:2])
 #    if(WITH_K)
-#      TREE_2simulations_K(divided_TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)
+      TREE_2simulations_K(divided_TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)
 #    if(WITH_Ca)
 #      TREE_2simulations_Ca(divided_TREE,DELTA_T,filename,WITH_K,WITH_Ca,Params)
     ## else{

@@ -1,8 +1,6 @@
 source("investigate_main.R")
-Type <- "Gausian"
-#output_dir <- paste("./",Type,"_Result/",sep="")
-output_dir <- "~/Desktop/"
-
+Type <- "Tsuishi"
+output_dir <- paste("./",Type,"_Result/exp_",sep="")
 
 source(paste(Type,"_Dendritic_function_parameter.R",sep=""))
 source("plot_func.R")
@@ -16,9 +14,9 @@ par(lwd=3,
     cex=1.4,
     mex=1.2)
 
-Conductance_ratios <- c(0)
-WITH_Ks <- c(FALSE)
-WITH_Cas <- c(TRUE)
+Conductance_ratios <- c(0,5)
+WITH_Ks <- c(FALSE,TRUE)
+WITH_Cas <- c(FALSE,TRUE)
 
 
 Function_ratio <- 75
@@ -41,9 +39,9 @@ for(conductance_ratio in Conductance_ratios){
       }else if(WITH_Ca){
         name <- "ca"
       }else{
+        next
         if(conductance_ratio == 5) next
         else if(Type == "Tsuishi"){
-          
         }
         else Conductance_distribution <- ""
         name <- "passive"
